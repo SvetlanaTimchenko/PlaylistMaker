@@ -13,8 +13,7 @@ class MediaActivity : AppCompatActivity() {
         // реализация клика на кнопку Назад
         val buttonBack = findViewById<ImageView>(R.id.back)
         buttonBack.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            this.finish()
         }
     }
 }

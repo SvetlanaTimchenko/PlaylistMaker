@@ -11,6 +11,7 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         // реализация клика на кнопку Назад
+        // здесь не стала менять на this.finish()
         val buttonBack = findViewById<ImageView>(R.id.back)
         buttonBack.setOnClickListener {
             val displayIntent = Intent(this, MainActivity::class.java)

@@ -33,7 +33,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="40dp"
-        android:paddingHorizontal="@dimen/value_16"
+        android:paddingStart="@dimen/value_16"
+        android:paddingEnd="12dp"
         android:paddingVertical="@dimen/value_21"
         >
         <TextView
@@ -62,7 +63,8 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_16"
         app:drawableEndCompat="@drawable/ic_share"
-        android:paddingHorizontal="@dimen/value_16"
+        android:paddingStart="@dimen/value_16"
+        android:paddingEnd="12dp"
         android:paddingVertical="@dimen/value_21"
         />
 
@@ -75,7 +77,8 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_16"
         app:drawableEndCompat="@drawable/ic_contact"
-        android:paddingHorizontal="@dimen/value_16"
+        android:paddingStart="@dimen/value_16"
+        android:paddingEnd="12dp"
         android:paddingVertical="@dimen/value_21"
         />
 
@@ -88,7 +91,8 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_16"
         app:drawableEndCompat="@drawable/ic_forward"
-        android:paddingHorizontal="@dimen/value_16"
+        android:paddingStart="@dimen/value_16"
+        android:paddingEnd="12dp"
         android:paddingVertical="@dimen/value_21"
         />
 

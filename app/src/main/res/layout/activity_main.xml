@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/blue"
+    android:background="?attr/colorPrimaryVariant"
     android:paddingTop="@dimen/value_16">
     <TextView
         android:layout_width="wrap_content"
@@ -13,6 +13,7 @@
         android:text="@string/main_header"
         android:textColor="@color/white"
         android:fontFamily="@font/ys_display_medium"
+        android:background="?attr/colorPrimaryVariant"
         android:textSize="@dimen/text_22" />
 
     <LinearLayout
@@ -21,59 +22,30 @@
         android:layout_marginTop="40dp"
         android:layout_marginHorizontal="@dimen/value_16"
         android:layout_marginBottom="32dp"
+        android:background="?attr/colorPrimaryVariant"
         android:orientation="vertical">
 
         <Button
             android:id="@+id/search_btn"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:fontFamily="@font/ys_display_medium"
+            style="@style/mainButtons"
             android:text="@string/search"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_22"
-            app:cornerRadius="@dimen/value_16"
             app:icon="@drawable/ic_search"
-            app:iconGravity="textStart"
-            app:iconPadding="10dp"
-            app:iconTint="@color/black" />
+            />
 
         <Button
             android:id="@+id/media_btn"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            style="@style/mainButtons"
             android:layout_marginTop="@dimen/value_16"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:fontFamily="@font/ys_display_medium"
             android:text="@string/media"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_22"
-            app:cornerRadius="@dimen/value_16"
             app:icon="@drawable/ic_media"
-            app:iconGravity="textStart"
-            app:iconPadding="10dp"
-            app:iconTint="@color/black" />
+            />
 
         <Button
             android:id="@+id/settings_btn"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            style="@style/mainButtons"
             android:layout_marginTop="@dimen/value_16"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:fontFamily="@font/ys_display_medium"
             android:text="@string/settings"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_22"
-            app:cornerRadius="@dimen/value_16"
             app:icon="@drawable/ic_settings"
-            app:iconGravity="textStart"
-            app:iconPadding="10dp"
-            app:iconTint="@color/black" />
+            />
     </LinearLayout>
 </LinearLayout>

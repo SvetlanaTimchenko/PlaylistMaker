@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="menu_icons">#FFFFFF</color>
+    <color name="knob_color">#3772E7</color>
+    <color name="tint_color">#1f336e</color>
+</resources>

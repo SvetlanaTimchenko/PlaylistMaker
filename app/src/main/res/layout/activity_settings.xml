@@ -50,18 +50,21 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/buttonShare"
         style="@style/settingsMenu"
         android:text="@string/share_app"
         app:drawableEndCompat="@drawable/ic_share"
         />
 
     <TextView
+        android:id="@+id/buttonEmail"
         style="@style/settingsMenu"
         android:text="@string/contact_support"
         app:drawableEndCompat="@drawable/ic_contact"
         />
 
     <TextView
+        android:id="@+id/buttonEula"
         style="@style/settingsMenu"
         android:text="@string/eula"
         app:drawableEndCompat="@drawable/ic_forward"

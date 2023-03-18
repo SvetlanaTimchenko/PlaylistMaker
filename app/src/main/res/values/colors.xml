@@ -9,6 +9,8 @@
     <color name="black">#1A1B22</color>
     <color name="white">#FFFFFFFF</color>
     <color name="menu_icons">#AEAFB4</color>
+    <color name="fields_icons">#AEAFB4</color>
     <color name="knob_color">#AEAFB4</color>
     <color name="tint_color">#E6E8EB</color>
+    <color name="fields_background">#E6E8EB</color>
 </resources>

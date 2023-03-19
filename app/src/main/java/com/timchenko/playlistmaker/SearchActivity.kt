@@ -10,6 +10,9 @@ import android.widget.EditText
 import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
+    companion object {
+        const val SEARCH_EDITTEXT = "SEARCH_EDITTEXT"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -17,7 +20,8 @@ class SearchActivity : AppCompatActivity() {
         // реализация клика на кнопку Назад
         val buttonBack = findViewById<ImageView>(R.id.back)
         buttonBack.setOnClickListener {
-            this.finish()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
         val inputEditText = findViewById<EditText>(R.id.searchEditText)
@@ -42,5 +46,17 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val searchEditText = findViewById<EditText>(R.id.searchEditText)
+        outState.putString(SEARCH_EDITTEXT, searchEditText.text.toString())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val searchEditText = findViewById<EditText>(R.id.searchEditText)
+        searchEditText.setText(savedInstanceState.getString(SEARCH_EDITTEXT))
     }
 }

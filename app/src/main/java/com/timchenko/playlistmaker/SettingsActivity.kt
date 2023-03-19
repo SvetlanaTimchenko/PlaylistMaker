@@ -23,21 +23,19 @@ class SettingsActivity : AppCompatActivity() {
         buttonShare.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, "https://practicum.yandex.ru/android-developer/")
-            intent.putExtra(Intent.EXTRA_TITLE, "Android-разработка от Яндекс Практикума")
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_uri))
+            intent.putExtra(Intent.EXTRA_TITLE, getString(R.string.share_title))
             startActivity(intent)
         }
 
         // кнопка "Написать в поддержку"
         val buttonEmail = findViewById<TextView>(R.id.buttonEmail)
         buttonEmail.setOnClickListener {
-            val message = "Спасибо разработчикам и разработчицам за крутое приложение!"
-            val subj = "Сообщение разработчикам и разработчицам приложения Playlist Maker"
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("svetlana010785@yandex.ru"))
-            intent.putExtra(Intent.EXTRA_SUBJECT, subj)
-            intent.putExtra(Intent.EXTRA_TEXT, message)
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.contact_from)))
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_subj))
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.contact_message))
             startActivity(intent)
         }
 
@@ -45,7 +43,7 @@ class SettingsActivity : AppCompatActivity() {
         // кнопка "Пользовательское соглашение"
         val buttonEula = findViewById<TextView>(R.id.buttonEula)
         buttonEula.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://yandex.ru/legal/practicum_offer/"))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.eula_uri)))
             startActivity(intent)
         }
     }

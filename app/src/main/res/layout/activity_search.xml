@@ -9,7 +9,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="20dp"
         >
 
         <ImageView
@@ -38,6 +37,7 @@
             android:drawableStart="@drawable/ic_search"
             android:drawableTint="@color/fields_icons"
             android:drawablePadding="8dp"
+            android:textColor="@color/black"
             android:hint="@string/search"
             android:inputType="text"
             android:lines="1"

@@ -10,4 +10,10 @@
     <string name="share_app">Share application</string>
     <string name="contact_support">Contact support</string>
     <string name="eula">End User License Agreement</string>
+    <string name="eula_uri">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="share_uri">https://practicum.yandex.ru/android-developer/</string>
+    <string name="share_title">Android-development course from Yandex Practicum</string>
+    <string name="contact_message">Thank you developers for this amazing app!</string>
+    <string name="contact_subj">Message to Playlist Maker devs</string>
+    <string name="contact_from">svetlana010785@yandex.ru</string>
 </resources>

@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
         buttonSearch.setOnClickListener {
             val displayIntent = Intent(this, SearchActivity::class.java)
             startActivity(displayIntent)
-            //Toast.makeText(this@MainActivity, "Нажатие на кнопку Поиск!", Toast.LENGTH_SHORT).show()
         }
 
         // реализация клика на кнопку Медиа

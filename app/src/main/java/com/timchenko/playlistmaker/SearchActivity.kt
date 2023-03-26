@@ -1,7 +1,6 @@
 package com.timchenko.playlistmaker
 
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -16,6 +15,9 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_EDITTEXT = "SEARCH_EDITTEXT"
     }
+
+    lateinit var inputEditText: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -23,11 +25,10 @@ class SearchActivity : AppCompatActivity() {
         // реализация клика на кнопку Назад
         val buttonBack = findViewById<ImageView>(R.id.back)
         buttonBack.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            this.finish()
         }
 
-        val inputEditText = findViewById<EditText>(R.id.searchEditText)
+        inputEditText = findViewById<EditText>(R.id.searchEditText)
         val clearSearchButton = findViewById<ImageView>(R.id.searchClear)
 
         clearSearchButton.setOnClickListener {
@@ -54,14 +55,14 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val searchEditText = findViewById<EditText>(R.id.searchEditText)
-        outState.putString(SEARCH_EDITTEXT, searchEditText.text.toString())
+        //val searchEditText = findViewById<EditText>(R.id.searchEditText)
+        outState.putString(SEARCH_EDITTEXT, inputEditText.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        val searchEditText = findViewById<EditText>(R.id.searchEditText)
-        searchEditText.setText(savedInstanceState.getString(SEARCH_EDITTEXT))
+        //val searchEditText = findViewById<EditText>(R.id.searchEditText)
+        inputEditText.setText(savedInstanceState.getString(SEARCH_EDITTEXT))
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

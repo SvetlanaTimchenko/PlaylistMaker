@@ -31,12 +31,13 @@ class SettingsActivity : AppCompatActivity() {
         // кнопка "Написать в поддержку"
         val buttonEmail = findViewById<TextView>(R.id.buttonEmail)
         buttonEmail.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse("mailto:")
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.contact_from)))
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_subj))
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.contact_message))
-            startActivity(intent)
+            Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.contact_from)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_subj))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.contact_message))
+                startActivity(this)
+            }
         }
 
 

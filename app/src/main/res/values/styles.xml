@@ -41,7 +41,7 @@
         <item name="android:textSize">@dimen/text_16</item>
         <item name="android:paddingStart">@dimen/value_16</item>
         <item name="android:paddingEnd">@dimen/value_12</item>
-        <item name="android:paddingVertical">@dimen/value_21</item>
+        <item name="android:paddingVertical">@dimen/value_24</item>
         <item name="iconTint">?attr/colorOnPrimary</item>
     </style>
 </resources>

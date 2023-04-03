@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:textSize="11sp"
             android:textColor="@color/menu_icons"
+            android:fontFamily="@font/ys_display_regular"
             tools:text="@string/track_description_placeholder"
             android:maxLines="1"
             android:ellipsize="end"

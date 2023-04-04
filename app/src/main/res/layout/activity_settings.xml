@@ -28,7 +28,7 @@
         android:layout_marginTop="40dp"
         android:paddingStart="@dimen/value_16"
         android:paddingEnd="12dp"
-        android:paddingVertical="@dimen/value_21"
+        android:paddingVertical="@dimen/value_24"
         >
         <TextView
             android:layout_width="0dp"

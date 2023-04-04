@@ -16,7 +16,6 @@
         android:layout_height="45dp"
         android:scaleType="centerCrop"
         android:src="@drawable/placeholderph"
-        android:contentDescription="@string/track_name_placeholder"
         />
     <LinearLayout
         android:layout_width="0dp"
@@ -33,7 +32,7 @@
             android:textSize="@dimen/text_16"
             android:textColor="?attr/colorOnPrimary"
             android:fontFamily="@font/ys_display_regular"
-            tools:text="@string/track_name_placeholder"
+            tools:text="Track name"
             android:maxLines="1"
             android:ellipsize="end"
             />

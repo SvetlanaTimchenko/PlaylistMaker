@@ -16,6 +16,7 @@
         <ImageView
             android:id="@+id/back"
             style="@style/BackMenuStyleImg"
+            android:contentDescription="@string/back"
             />
 
         <TextView
@@ -33,6 +34,8 @@
 
         <EditText
             android:id="@+id/searchEditText"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:background="@drawable/rounded_edittext"
@@ -41,6 +44,7 @@
             android:drawablePadding="8dp"
             android:textColor="@color/black"
             android:hint="@string/search"
+            android:importantForAutofill="no"
             android:inputType="text"
             android:lines="1"
             android:maxLength="15"
@@ -57,6 +61,7 @@
             android:background="@color/fields_background"
             android:visibility="invisible"
             app:tint="@color/fields_icons"
+            android:contentDescription="@string/clear_search"
             />
     </FrameLayout>
 
@@ -66,9 +71,44 @@
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
+        android:visibility="gone"
         tools:listitem="@layout/track_item"
         android:paddingStart="@dimen/value_12"
         android:layout_marginTop="@dimen/value_24"
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/placeholderMessage"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="102dp"
+        >
+        <ImageView
+            android:id="@+id/errorSearchImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/value_16"
+            />
+
+        <TextView
+            android:id="@+id/errorSearchText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_medium"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="19sp" />
+        <Button
+            android:id="@+id/refreshSearch"
+            style="@style/smallButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/refresh"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/value_24"
+            />
+    </LinearLayout>
 
 </LinearLayout>

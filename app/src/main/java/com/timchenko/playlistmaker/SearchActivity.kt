@@ -5,20 +5,45 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
+
+    private val iTunesUrl = "https://itunes.apple.com"
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(iTunesUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val iTunesService = retrofit.create<ITunesApi>()
+    private val tracks = ArrayList<Track>()
+    private val trackAdapter = TrackAdapter()
+    private lateinit var placeholderMessage: LinearLayout
+    private lateinit var placeholderImage: ImageView
+    private lateinit var placeholderText: TextView
+    private lateinit var placeholderButton: Button
+    private lateinit var inputEditText: EditText
+    private lateinit var rvTracks: RecyclerView
+    private var errorIconId: Int = 0
+    private var errorTextId: Int = 0
+    private lateinit var previousRequest: String
+
     companion object {
         const val SEARCH_EDITTEXT = "SEARCH_EDITTEXT"
 
     }
-
-    lateinit var inputEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +57,17 @@ class SearchActivity : AppCompatActivity() {
 
         inputEditText = findViewById<EditText>(R.id.searchEditText)
         val clearSearchButton = findViewById<ImageView>(R.id.searchClear)
+        trackAdapter.tracks = tracks
+
+        rvTracks = findViewById<RecyclerView>(R.id.recyclerTracks)
+        rvTracks.adapter = trackAdapter
 
         clearSearchButton.setOnClickListener {
             inputEditText.setText("")
             clearSearchButton.visibility = View.GONE
             inputEditText.clearFocus()
+            tracks.clear()
+            trackAdapter.notifyDataSetChanged()
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -54,30 +85,124 @@ class SearchActivity : AppCompatActivity() {
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
-        val trackAdapter = TrackAdapter(
-            arrayListOf(
-                Track("Smells Like Teen Spirit", "Nirvana", "5:01", "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"),
-                Track("Billie Jean", "Michael Jackson", "4:35", "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"),
-                Track("Stayin' Alive", "Bee Gees", "4:10", "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"),
-                Track("Whole Lotta Love", "Led Zeppelin", "5:33", "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"),
-                Track("Sweet Child O'Mine", "Guns N' Roses", "5:03", "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg")
-            )
-        )
 
-        val rvTracks = findViewById<RecyclerView>(R.id.recyclerTracks)
-        rvTracks.adapter = trackAdapter
 
+
+        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // ВЫПОЛНЯЙТЕ ПОИСКОВЫЙ ЗАПРОС ЗДЕСЬ
+                if (inputEditText.text.isNotEmpty()) {
+                    previousRequest = inputEditText.text.toString()
+                }
+                makeSearch(previousRequest)
+                //true
+            }
+            false
+        }
+
+        val refreshSearchButton = findViewById<Button>(R.id.refreshSearch)
+        refreshSearchButton.setOnClickListener() {
+            inputEditText.setText(previousRequest)
+            makeSearch(previousRequest)
+        }
+    }
+
+    private fun makeSearch(text: String) {
+        showMessage(0, 0, false) // убираем плейсхолдер, если он был показан
+        if (text.isNotEmpty()) {
+            iTunesService.search(text).enqueue(object : Callback<ITunesResponse> {
+                override fun onResponse(
+                    call: Call<ITunesResponse>,
+                    response: Response<ITunesResponse>
+                ) {
+                    Log.d("RESPONSE_BODY", "${response.code()}")
+                    if (response.code() == 200) {
+                        tracks.clear()
+                        if (response.body()?.resultCount!! > 0) {
+                            Log.d("RESPONSE_BODY", "${response.body()?.results}")
+                            tracks.addAll(response.body()?.results!!)
+                            trackAdapter.notifyDataSetChanged()
+                            rvTracks.visibility = View.VISIBLE
+                        }
+                        else {
+                            errorIconId = resources.getIdentifier(
+                                "il_search_error",
+                                "drawable",
+                                packageName
+                            )
+                            errorTextId = resources.getIdentifier(
+                                "nothing_found",
+                                "string",
+                                packageName
+                            )
+                            showMessage(errorTextId, errorIconId, false)
+                        }
+                    }
+                    else {
+                        errorIconId = resources.getIdentifier(
+                            "il_search_connect",
+                            "drawable",
+                            packageName
+                        )
+                        errorTextId = resources.getIdentifier(
+                            "no_connetion",
+                            "string",
+                            packageName
+                        )
+                        showMessage(errorTextId, errorIconId, true)
+                    }
+                }
+
+                override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {
+                    errorIconId = resources.getIdentifier(
+                        "il_search_connect",
+                        "drawable",
+                        packageName
+                    )
+                    errorTextId = resources.getIdentifier(
+                        "no_connetion",
+                        "string",
+                        packageName
+                    )
+                    showMessage(errorTextId, errorIconId, true)
+                }
+            })
+        }
+    }
+
+    private fun showMessage(textId: Int, imageId: Int, showButton: Boolean) {
+
+        placeholderMessage = findViewById(R.id.placeholderMessage)
+        placeholderImage  = findViewById(R.id.errorSearchImage)
+        placeholderText = findViewById(R.id.errorSearchText)
+        placeholderButton = findViewById(R.id.refreshSearch)
+
+        if (textId > 0) {
+            placeholderMessage.visibility = View.VISIBLE
+            placeholderImage.setImageResource(imageId)
+            placeholderText.setText(textId)
+            if (showButton) {
+                placeholderButton.visibility = View.VISIBLE
+            }
+            else {
+                placeholderButton.visibility = View.GONE
+            }
+
+            tracks.clear()
+            trackAdapter.notifyDataSetChanged()
+            rvTracks.visibility = View.GONE
+        } else {
+            placeholderMessage.visibility = View.GONE
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        //val searchEditText = findViewById<EditText>(R.id.searchEditText)
         outState.putString(SEARCH_EDITTEXT, inputEditText.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        //val searchEditText = findViewById<EditText>(R.id.searchEditText)
         inputEditText.setText(savedInstanceState.getString(SEARCH_EDITTEXT))
     }
 

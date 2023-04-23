@@ -68,6 +68,7 @@ class SearchActivity : AppCompatActivity() {
             inputEditText.clearFocus()
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
+            showMessage()
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -86,16 +87,12 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
 
-
-
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // ВЫПОЛНЯЙТЕ ПОИСКОВЫЙ ЗАПРОС ЗДЕСЬ
                 if (inputEditText.text.isNotEmpty()) {
                     previousRequest = inputEditText.text.toString()
                 }
                 makeSearch(previousRequest)
-                //true
             }
             false
         }
@@ -108,7 +105,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun makeSearch(text: String) {
-        showMessage(0, 0, false) // убираем плейсхолдер, если он был показан
+        // убираем плейсхолдер, если он был показан
+        showMessage()
         if (text.isNotEmpty()) {
             iTunesService.search(text).enqueue(object : Callback<ITunesResponse> {
                 override fun onResponse(
@@ -135,7 +133,7 @@ class SearchActivity : AppCompatActivity() {
                                 "string",
                                 packageName
                             )
-                            showMessage(errorTextId, errorIconId, false)
+                            showMessage(textId = errorTextId, imageId = errorIconId)
                         }
                     }
                     else {
@@ -149,7 +147,7 @@ class SearchActivity : AppCompatActivity() {
                             "string",
                             packageName
                         )
-                        showMessage(errorTextId, errorIconId, true)
+                        showMessage(textId = errorTextId, imageId = errorIconId, showButton = true)
                     }
                 }
 
@@ -164,13 +162,17 @@ class SearchActivity : AppCompatActivity() {
                         "string",
                         packageName
                     )
-                    showMessage(errorTextId, errorIconId, true)
+                    showMessage(textId = errorTextId, imageId = errorIconId, showButton = true)
                 }
             })
         }
     }
 
-    private fun showMessage(textId: Int, imageId: Int, showButton: Boolean) {
+    private fun showMessage(
+        textId: Int = 0,
+        imageId: Int = 0,
+        showButton: Boolean = false
+    ) {
 
         placeholderMessage = findViewById(R.id.placeholderMessage)
         placeholderImage  = findViewById(R.id.errorSearchImage)

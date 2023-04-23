@@ -5,32 +5,27 @@
     android:orientation="vertical"
     android:padding="@dimen/value_16"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/back"
             style="@style/BackMenuStyleImg"
-            android:contentDescription="@string/back"
-            />
+            android:contentDescription="@string/back" />
 
         <TextView
             style="@style/BackMenuStyleText"
-            android:text="@string/search"
-            />
+            android:text="@string/search" />
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        >
+        android:layout_marginTop="24dp">
 
         <EditText
             android:id="@+id/searchEditText"
@@ -47,7 +42,6 @@
             android:importantForAutofill="no"
             android:inputType="text"
             android:lines="1"
-            android:maxLength="15"
             android:padding="8dp"
             android:paddingStart="@dimen/value_12" />
         <ImageView
@@ -61,8 +55,7 @@
             android:background="@color/fields_background"
             android:visibility="invisible"
             app:tint="@color/fields_icons"
-            android:contentDescription="@string/clear_search"
-            />
+            android:contentDescription="@string/clear_search" />
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -74,8 +67,7 @@
         android:visibility="gone"
         tools:listitem="@layout/track_item"
         android:paddingStart="@dimen/value_12"
-        android:layout_marginTop="@dimen/value_24"
-        />
+        android:layout_marginTop="@dimen/value_24" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -83,14 +75,12 @@
         android:id="@+id/placeholderMessage"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginTop="102dp"
-        >
+        android:layout_marginTop="102dp">
         <ImageView
             android:id="@+id/errorSearchImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_16"
-            />
+            android:layout_marginBottom="@dimen/value_16" />
 
         <TextView
             android:id="@+id/errorSearchText"
@@ -107,8 +97,7 @@
             android:layout_height="wrap_content"
             android:text="@string/refresh"
             android:visibility="gone"
-            android:layout_marginTop="@dimen/value_24"
-            />
+            android:layout_marginTop="@dimen/value_24" />
     </LinearLayout>
 
 </LinearLayout>

@@ -16,4 +16,8 @@
     <string name="contact_subj">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="contact_from">svetlana010785@yandex.ru</string>
     <string name="track_description_placeholder">Артист \u2022 время</string>
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="no_connetion">Проблема со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="refresh">Обновить</string>
+    <string name="clear_search">Очистить</string>
 </resources>

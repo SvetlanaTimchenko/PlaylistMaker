@@ -1,11 +1,11 @@
 package com.timchenko.playlistmaker
 
 import android.content.Context
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -29,7 +29,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val iTunesService = retrofit.create<ITunesApi>()
     private val tracks = ArrayList<Track>()
-    private val trackAdapter = TrackAdapter()
+    private lateinit var trackAdapter: TrackAdapter
     private lateinit var placeholderMessage: LinearLayout
     private lateinit var placeholderImage: ImageView
     private lateinit var placeholderText: TextView
@@ -40,6 +40,12 @@ class SearchActivity : AppCompatActivity() {
     private var errorTextId: Int = 0
     private lateinit var previousRequest: String
 
+    private val searchResultsAdapter = SearchResultsAdapter()
+    private lateinit var searchResults: LinearLayout
+    private lateinit var listener: OnSharedPreferenceChangeListener
+    private lateinit var searchHistory: SearchHistory
+
+
     companion object {
         const val SEARCH_EDITTEXT = "SEARCH_EDITTEXT"
 
@@ -49,6 +55,11 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        val sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE)
+
+        trackAdapter = TrackAdapter(sharedPreferences)
+        searchHistory = SearchHistory(sharedPreferences)
+
         // реализация клика на кнопку Назад
         val buttonBack = findViewById<ImageView>(R.id.back)
         buttonBack.setOnClickListener {
@@ -57,8 +68,8 @@ class SearchActivity : AppCompatActivity() {
 
         inputEditText = findViewById<EditText>(R.id.searchEditText)
         val clearSearchButton = findViewById<ImageView>(R.id.searchClear)
-        trackAdapter.tracks = tracks
 
+        trackAdapter.tracks = tracks
         rvTracks = findViewById<RecyclerView>(R.id.recyclerTracks)
         rvTracks.adapter = trackAdapter
 
@@ -71,6 +82,8 @@ class SearchActivity : AppCompatActivity() {
             showMessage()
         }
 
+        searchResults = findViewById(R.id.searchPrefs)
+
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -79,6 +92,7 @@ class SearchActivity : AppCompatActivity() {
                 if (!s.isNullOrEmpty()) {
                     clearSearchButton.visibility = View.VISIBLE
                 }
+                searchResults.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -86,6 +100,17 @@ class SearchActivity : AppCompatActivity() {
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            val sp = searchHistory.getFromHistory()
+            if (sp.isNotEmpty()) {
+                searchResults.visibility =
+                    if (hasFocus && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
+                showSearchHistory(searchHistory)
+            }
+            else {
+                searchResults.visibility = View.GONE
+            }
+        }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -98,10 +123,36 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val refreshSearchButton = findViewById<Button>(R.id.refreshSearch)
-        refreshSearchButton.setOnClickListener() {
+        refreshSearchButton.setOnClickListener {
             inputEditText.setText(previousRequest)
             makeSearch(previousRequest)
         }
+
+        val clearSearchResultsButton = findViewById<Button>(R.id.clearSearchHistory)
+        clearSearchResultsButton.setOnClickListener {
+            searchHistory.clearHistory()
+            searchResults.visibility = View.GONE
+        }
+
+        listener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == SEARCH_HISTORY) {
+                showSearchHistory(searchHistory)
+            }
+        }
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+
+    }
+
+    private fun showSearchHistory(searchHistory: SearchHistory) {
+
+        val rvTracks = findViewById<RecyclerView>(R.id.recyclerSearch)
+
+        searchResultsAdapter.tracks = searchHistory.getFromHistory()
+        rvTracks.adapter = searchResultsAdapter
+        searchResultsAdapter.notifyDataSetChanged()
+
+        rvTracks.visibility = View.VISIBLE
     }
 
     private fun makeSearch(text: String) {
@@ -113,11 +164,9 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<ITunesResponse>,
                     response: Response<ITunesResponse>
                 ) {
-                    Log.d("RESPONSE_BODY", "${response.code()}")
                     if (response.code() == 200) {
                         tracks.clear()
                         if (response.body()?.resultCount!! > 0) {
-                            Log.d("RESPONSE_BODY", "${response.body()?.results}")
                             tracks.addAll(response.body()?.results!!)
                             trackAdapter.notifyDataSetChanged()
                             rvTracks.visibility = View.VISIBLE

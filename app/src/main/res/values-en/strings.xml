@@ -21,4 +21,7 @@
     <string name="no_connetion">Connection error\n\nDownload failed. Check your internet connection</string>
     <string name="refresh">Refresh</string>
     <string name="clear_search">Clear search</string>
+    <string name="clear_history">Clear history</string>
+    <string name="u_searched">You searched for</string>
+
 </resources>

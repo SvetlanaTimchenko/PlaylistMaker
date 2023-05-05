@@ -1,14 +1,14 @@
 package com.timchenko.playlistmaker
 
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class TrackAdapter (sharedPreferences: SharedPreferences) : RecyclerView.Adapter<TrackViewHolder> () {
+// берем тот же RV, что и для отображения списка найденных треков
+// и модифицируем под работу со списком из 10 последних треков, которые просматривали
+class SearchResultsAdapter() : RecyclerView.Adapter<TrackViewHolder> () {
 
     var tracks = ArrayList<Track>()
-    var searchHistory = SearchHistory(sharedPreferences)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater
@@ -17,17 +17,12 @@ class TrackAdapter (sharedPreferences: SharedPreferences) : RecyclerView.Adapter
         return TrackViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        val track = tracks[position]
-        holder.bind(track)
-
-        holder.itemView.setOnClickListener {
-            searchHistory.addTrack(track)
-        }
-    }
-
     override fun getItemCount(): Int {
         return tracks.size
     }
 
+    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
+        holder.bind(tracks[position])
+    }
 }
+

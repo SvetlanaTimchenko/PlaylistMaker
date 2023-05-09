@@ -9,68 +9,51 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="20dp"
-        >
+        android:paddingHorizontal="20dp">
 
         <ImageView
             android:id="@+id/back"
-            style="@style/BackMenuStyleImg"
-            />
+            style="@style/BackMenuStyleImg" />
         <TextView
             style="@style/BackMenuStyleText"
-            android:text="@string/settings"
-            />
+            android:text="@string/settings" />
     </LinearLayout>
-    <LinearLayout
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/themeSwitcher"
+        android:text="@string/night_theme"
+        android:layout_gravity="start"
+        android:fontFamily="@font/ys_display_regular"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="@dimen/text_16"
+        android:layout_marginStart="@dimen/value_16"
+        android:layout_marginEnd="@dimen/value_12"
+        android:layout_marginTop="40dp"
+        app:thumbTint="@color/knob_color"
+        app:trackTint="@color/tint_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="40dp"
-        android:paddingStart="@dimen/value_16"
-        android:paddingEnd="12dp"
-        android:paddingVertical="@dimen/value_24"
-        >
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="start|center_vertical"
-            android:fontFamily="@font/ys_display_regular"
-            android:text="@string/night_theme"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="@dimen/text_16"
-            />
-        <androidx.appcompat.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="16dp"
-            android:gravity="end|center_vertical"
-            app:thumbTint="@color/knob_color"
-            app:trackTint="@color/tint_color"
-            />
-    </LinearLayout>
+        android:paddingVertical="@dimen/value_24"/>
 
     <TextView
         android:id="@+id/buttonShare"
         style="@style/settingsMenu"
         android:text="@string/share_app"
         app:drawableEndCompat="@drawable/ic_share"
-        android:drawableTint="@color/menu_icons"
-        />
+        android:drawableTint="@color/menu_icons" />
 
     <TextView
         android:id="@+id/buttonEmail"
         style="@style/settingsMenu"
         android:text="@string/contact_support"
         app:drawableEndCompat="@drawable/ic_contact"
-        android:drawableTint="@color/menu_icons"
-        />
+        android:drawableTint="@color/menu_icons" />
 
     <TextView
         android:id="@+id/buttonEula"
         style="@style/settingsMenu"
         android:text="@string/eula"
         app:drawableEndCompat="@drawable/ic_forward"
-        android:drawableTint="@color/menu_icons"
-        />
+        android:drawableTint="@color/menu_icons" />
 
 </LinearLayout>

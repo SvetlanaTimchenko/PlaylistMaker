@@ -68,7 +68,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/textsBarrier"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="Country"/>
     <TextView
         android:id="@+id/gender"
         style="@style/audioPlayerDescriptionText"
@@ -84,7 +85,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/textsBarrier"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/countryVar" />
+        app:layout_constraintBottom_toTopOf="@id/countryVar"
+        tools:text="Gender" />
     <TextView
         android:id="@+id/year"
         style="@style/audioPlayerDescriptionText"
@@ -100,7 +102,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/textsBarrier"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/genderVar" />
+        app:layout_constraintBottom_toTopOf="@id/genderVar"
+        tools:text="2000" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/albumGroup"
@@ -125,7 +128,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/textsBarrier"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/yearVar" />
+        app:layout_constraintBottom_toTopOf="@id/yearVar"
+        tools:text="Albumn name" />
     <TextView
         android:id="@+id/time"
         style="@style/audioPlayerDescriptionText"
@@ -141,7 +145,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/textsBarrier"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/albumVar" />
+        app:layout_constraintBottom_toTopOf="@id/albumVar"
+        tools:text="00:00" />
     <TextView
         android:id="@+id/timeBar"
         android:layout_width="wrap_content"

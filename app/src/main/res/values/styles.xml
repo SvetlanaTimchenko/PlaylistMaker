@@ -54,4 +54,18 @@
         <item name="android:paddingVertical">@dimen/value_24</item>
         <item name="iconTint">?attr/colorOnPrimary</item>
     </style>
+    <style name="audioPlayerDescriptionText">
+        <item name="android:textColor">@color/menu_icons</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_marginBottom">17dp</item>
+    </style>
+    <style name="audioPlayerDescriptionValues">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textAlignment">textEnd</item>
+        <item name="android:layout_marginStart">@dimen/value_16</item>
+        <item name="android:layout_marginBottom">17dp</item>
+    </style>
 </resources>

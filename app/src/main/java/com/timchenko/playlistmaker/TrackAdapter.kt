@@ -1,9 +1,11 @@
 package com.timchenko.playlistmaker
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 
 class TrackAdapter (sharedPreferences: SharedPreferences) : RecyclerView.Adapter<TrackViewHolder> () {
 
@@ -23,6 +25,11 @@ class TrackAdapter (sharedPreferences: SharedPreferences) : RecyclerView.Adapter
 
         holder.itemView.setOnClickListener {
             searchHistory.addTrack(track)
+
+            // открываем аудиоплеер
+            val displayIntent = Intent(it.context, AudioPlayerActivity::class.java)
+            displayIntent.putExtra("track", Gson().toJson(track))
+            it.context.startActivity(displayIntent)
         }
     }
 

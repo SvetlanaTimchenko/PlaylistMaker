@@ -4,7 +4,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 
 // берем тот же RV, что и для отображения списка найденных треков
 // и модифицируем под работу со списком из 10 последних треков, которые просматривали
@@ -29,7 +28,7 @@ class SearchResultsAdapter() : RecyclerView.Adapter<TrackViewHolder> () {
         holder.itemView.setOnClickListener {
             // открываем аудиоплеер
             val displayIntent = Intent(it.context, AudioPlayerActivity::class.java)
-            displayIntent.putExtra("track", Gson().toJson(tracks[position]))
+            displayIntent.putExtra("track", tracks[position])
             it.context.startActivity(displayIntent)
         }
 

@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 
 class TrackAdapter (sharedPreferences: SharedPreferences) : RecyclerView.Adapter<TrackViewHolder> () {
 
@@ -28,7 +27,7 @@ class TrackAdapter (sharedPreferences: SharedPreferences) : RecyclerView.Adapter
 
             // открываем аудиоплеер
             val displayIntent = Intent(it.context, AudioPlayerActivity::class.java)
-            displayIntent.putExtra("track", Gson().toJson(track))
+            displayIntent.putExtra("track", track)
             it.context.startActivity(displayIntent)
         }
     }

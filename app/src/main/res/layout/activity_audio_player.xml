@@ -174,24 +174,18 @@
 
     <ImageButton
         android:id="@+id/addToPlayListBtn"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
+        style="@style/audioPlayerButtons"
         android:src="@drawable/buttonaddlist"
         android:contentDescription="@string/playlist_button"
-        android:background="@null"
-        android:layout_marginBottom="29dp"
         android:layout_marginStart="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/timeBar" />
 
     <ImageButton
         android:id="@+id/LikeBtn"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
+        style="@style/audioPlayerButtons"
         android:src="@drawable/buttonliken"
-        android:background="@null"
         android:contentDescription="@string/like_button"
-        android:layout_marginBottom="29dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/timeBar" />
@@ -205,10 +199,12 @@
         android:fontFamily="@font/ys_display_medium"
         android:textSize="14sp"
         android:layout_marginStart="@dimen/value_24"
+        android:layout_marginEnd="@dimen/value_24"
         android:layout_marginBottom="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/playBtn" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/playBtn"
+        tools:text="Artist Name that can be extremely long. However we will make the margins to be available."/>
 
     <TextView
         android:id="@+id/track"
@@ -219,10 +215,12 @@
         android:fontFamily="@font/ys_display_medium"
         android:textSize="22sp"
         android:layout_marginStart="@dimen/value_24"
+        android:layout_marginEnd="@dimen/value_24"
         android:layout_marginBottom="@dimen/value_12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/artist" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/artist"
+        tools:text="Track Name with the long text as well. May be it should be this." />
 
     <ImageView
         android:id="@+id/trackCover"

@@ -1,5 +1,6 @@
 package com.timchenko.playlistmaker
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -8,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.gson.Gson
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
@@ -18,6 +19,15 @@ import java.util.Locale
 class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var track: Track
+    private lateinit var country : TextView
+    private lateinit var gender : TextView
+    private lateinit var year : TextView
+    private lateinit var time : TextView
+    private lateinit var artist : TextView
+    private lateinit var trackName : TextView
+
+    private lateinit var albumGroup : Group
+    private lateinit var album : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,19 +40,19 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         // достаем трек
-        val trackString = intent.getStringExtra("track")
-        track = Gson().fromJson(trackString, Track::class.java)
+        track = getSerializable("track", Track::class.java)
 
         // обновляем xml
-        val country = findViewById<TextView>(R.id.countryVar)
-        val gender = findViewById<TextView>(R.id.genderVar)
-        val year = findViewById<TextView>(R.id.yearVar)
-        val time = findViewById<TextView>(R.id.timeVar)
-        val artist = findViewById<TextView>(R.id.artist)
-        val trackName = findViewById<TextView>(R.id.track)
+        country = findViewById(R.id.countryVar)
+        gender = findViewById(R.id.genderVar)
+        year = findViewById(R.id.yearVar)
+        time = findViewById(R.id.timeVar)
+        artist = findViewById(R.id.artist)
+        trackName = findViewById(R.id.track)
 
-        val albumGroup = findViewById<Group>(R.id.albumGroup)
-        val album = findViewById<TextView>(R.id.albumVar)
+        albumGroup = findViewById(R.id.albumGroup)
+        album = findViewById(R.id.albumVar)
+
         artist.text = track.artistName
         trackName.text = track.trackName
         country.text = track.country
@@ -69,5 +79,13 @@ class AudioPlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(resources.getDimensionPixelOffset(R.dimen.value_8)))
             .into(this.findViewById(R.id.trackCover))
 
+    }
+
+    private fun <T : Serializable?> getSerializable(name: String, clazz: Class<T>): T
+    {
+        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            intent.getSerializableExtra(name, clazz)!!
+        else
+            intent.getSerializableExtra(name) as T
     }
 }

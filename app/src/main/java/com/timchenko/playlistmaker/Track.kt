@@ -1,6 +1,7 @@
 package com.timchenko.playlistmaker
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Track(
     val trackId: Int,
@@ -12,7 +13,7 @@ data class Track(
     val releaseDate: String, // Год релиза трека
     val primaryGenreName: String, // жанр
     val country: String // Страна исполнителя
-) {
+) : Serializable {
     /**
      * Возвращает измененный URL обложки размером 512х512
      */

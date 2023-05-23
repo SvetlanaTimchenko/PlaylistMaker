@@ -58,6 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/country"
+        app:layout_constraintBaseline_toBaselineOf="@id/countryVar"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintBottom_toBottomOf="parent" />
     <TextView
@@ -69,7 +70,6 @@
         app:layout_constraintStart_toEndOf="@id/textsBarrier"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@id/country"
         tools:text="Artist Name that can be extremely long. However we will make the margins to be available."/>
     <TextView
         android:id="@+id/gender"
@@ -77,8 +77,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/gender"
-        app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintBottom_toTopOf="@id/country" />
+        app:layout_constraintBaseline_toBaselineOf="@id/genderVar"
+        app:layout_constraintStart_toStartOf="@id/leftBorder" />
     <TextView
         android:id="@+id/genderVar"
         style="@style/audioPlayerDescriptionValues"
@@ -86,8 +86,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/textsBarrier"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/countryVar"
-        app:layout_constraintBaseline_toBaselineOf="@id/gender"
+        app:layout_constraintBottom_toTopOf="@+id/countryVar"
         tools:text="Artist Name that can be extremely long. However we will make the margins to be available." />
     <TextView
         android:id="@+id/year"
@@ -95,8 +94,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/year"
-        app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintBottom_toTopOf="@id/gender" />
+        app:layout_constraintBaseline_toBaselineOf="@id/yearVar"
+        app:layout_constraintStart_toStartOf="@id/leftBorder" />
     <TextView
         android:id="@+id/yearVar"
         style="@style/audioPlayerDescriptionValues"
@@ -104,8 +103,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/textsBarrier"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/genderVar"
-        app:layout_constraintBaseline_toBaselineOf="@id/year"
+        app:layout_constraintBottom_toTopOf="@+id/genderVar"
         tools:text="Artist Name that can be extremely long. However we will make the margins to be available." />
 
     <androidx.constraintlayout.widget.Group
@@ -121,8 +119,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/album"
-        app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintBottom_toTopOf="@id/year" />
+        app:layout_constraintBaseline_toBaselineOf="@id/albumVar"
+        app:layout_constraintStart_toStartOf="@id/leftBorder" />
     <TextView
         android:id="@+id/albumVar"
         style="@style/audioPlayerDescriptionValues"
@@ -131,8 +129,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/textsBarrier"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/yearVar"
-        app:layout_constraintBaseline_toBaselineOf="@id/album"
+        app:layout_constraintBottom_toTopOf="@+id/yearVar"
         tools:text="Artist Name that can be extremely long. However we will make the margins to be available." />
     <TextView
         android:id="@+id/time"
@@ -140,18 +137,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/time"
-        app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintBottom_toTopOf="@id/album" />
+        app:layout_constraintBaseline_toBaselineOf="@id/timeVar"
+        app:layout_constraintStart_toStartOf="@id/leftBorder" />
+
     <TextView
         android:id="@+id/timeVar"
         style="@style/audioPlayerDescriptionValues"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/textsBarrier"
+        android:layout_marginBottom="20dp"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintBottom_toTopOf="@id/albumVar"
-        app:layout_constraintBaseline_toBaselineOf="@id/time"
+        app:layout_constraintStart_toEndOf="@id/textsBarrier"
+        app:layout_constraintBottom_toTopOf="@+id/albumVar"
         tools:text="Artist Name that can be extremely long. However we will make the margins to be available." />
+
     <TextView
         android:id="@+id/timeBar"
         android:layout_width="wrap_content"

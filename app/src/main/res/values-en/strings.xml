@@ -23,5 +23,14 @@
     <string name="clear_search">Clear search</string>
     <string name="clear_history">Clear history</string>
     <string name="u_searched">You searched for</string>
+    <string name="country">Country</string>
+    <string name="gender">Gender</string>
+    <string name="year">Year</string>
+    <string name="album">Album</string>
+    <string name="time">Time</string>
+    <string name="track_cover">Track Cover</string>
+    <string name="like_button">Like the song?</string>
+    <string name="play_button">Listen</string>
+    <string name="playlist_button">Save?</string>
 
 </resources>

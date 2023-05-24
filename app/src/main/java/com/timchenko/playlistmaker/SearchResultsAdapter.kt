@@ -1,5 +1,6 @@
 package com.timchenko.playlistmaker
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,15 @@ class SearchResultsAdapter() : RecyclerView.Adapter<TrackViewHolder> () {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
+
+        holder.itemView.setOnClickListener {
+            // открываем аудиоплеер
+            val displayIntent = Intent(it.context, AudioPlayerActivity::class.java)
+            displayIntent.putExtra("track", tracks[position])
+            it.context.startActivity(displayIntent)
+        }
+
+
     }
 }
 

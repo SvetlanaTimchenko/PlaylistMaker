@@ -1,5 +1,6 @@
 package com.timchenko.playlistmaker
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,6 +24,11 @@ class TrackAdapter (sharedPreferences: SharedPreferences) : RecyclerView.Adapter
 
         holder.itemView.setOnClickListener {
             searchHistory.addTrack(track)
+
+            // открываем аудиоплеер
+            val displayIntent = Intent(it.context, AudioPlayerActivity::class.java)
+            displayIntent.putExtra("track", track)
+            it.context.startActivity(displayIntent)
         }
     }
 

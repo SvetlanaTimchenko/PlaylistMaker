@@ -22,4 +22,15 @@
     <string name="clear_search">Очистить</string>
     <string name="clear_history">Очистить историю</string>
     <string name="u_searched">Вы искали</string>
+    <string name="country">Страна</string>
+    <string name="gender">Жанр</string>
+    <string name="year">Год</string>
+    <string name="album">Альбом</string>
+    <string name="time">Длительность</string>
+    <string name="track_cover">Обложка трека</string>
+    <string name="like_button">Нравится трек?</string>
+    <string name="play_button">Послушать</string>
+    <string name="playlist_button">Сохраним?</string>
+
+
 </resources>

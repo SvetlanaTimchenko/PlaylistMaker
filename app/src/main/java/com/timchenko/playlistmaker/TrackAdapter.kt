@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.timchenko.playlistmaker.domain.models.Track
+import com.timchenko.playlistmaker.presentation.AudioPlayerActivity
 
 class TrackAdapter (sharedPreferences: SharedPreferences) : RecyclerView.Adapter<TrackViewHolder> () {
 

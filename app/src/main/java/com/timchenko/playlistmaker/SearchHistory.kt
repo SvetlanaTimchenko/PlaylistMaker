@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.timchenko.playlistmaker.domain.models.Track
 
 const val SEARCH_HISTORY = ""
 

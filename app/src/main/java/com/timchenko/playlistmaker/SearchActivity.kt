@@ -19,6 +19,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.timchenko.playlistmaker.domain.models.Track
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 

@@ -6,6 +6,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.timchenko.playlistmaker.domain.models.Track
+import com.timchenko.playlistmaker.presentation.AudioPlayerActivity
 
 // берем тот же RV, что и для отображения списка найденных треков
 // и модифицируем под работу со списком из 10 последних треков, которые просматривали

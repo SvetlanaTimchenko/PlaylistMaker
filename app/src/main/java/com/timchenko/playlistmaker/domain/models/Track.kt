@@ -1,4 +1,4 @@
-package com.timchenko.playlistmaker
+package com.timchenko.playlistmaker.domain.models
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

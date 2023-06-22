@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
@@ -14,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.*
@@ -35,6 +38,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderText: TextView
     private lateinit var placeholderButton: Button
     private lateinit var inputEditText: EditText
+    private lateinit var progressBar: ProgressBar
     private lateinit var rvTracks: RecyclerView
     private var errorIconId: Int = 0
     private var errorTextId: Int = 0
@@ -45,10 +49,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var listener: OnSharedPreferenceChangeListener
     private lateinit var searchHistory: SearchHistory
 
+    private val handler = Handler(Looper.getMainLooper())
 
     companion object {
         const val SEARCH_EDITTEXT = "SEARCH_EDITTEXT"
-
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,6 +97,10 @@ class SearchActivity : AppCompatActivity() {
                 if (!s.isNullOrEmpty()) {
                     clearSearchButton.visibility = View.VISIBLE
                 }
+                previousRequest = inputEditText.text.toString()
+                val searchRunnable = Runnable { makeSearch(s.toString()) }
+                searchDebounce(searchRunnable)
+
                 searchResults.visibility = if (inputEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
             }
 
@@ -144,6 +153,11 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    private fun searchDebounce(searchRunnable: Runnable) {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     private fun showSearchHistory(searchHistory: SearchHistory) {
 
         val rvTracks = findViewById<RecyclerView>(R.id.recyclerSearch)
@@ -156,14 +170,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun makeSearch(text: String) {
+        progressBar = findViewById(R.id.progressBar)
         // убираем плейсхолдер, если он был показан
         showMessage()
         if (text.isNotEmpty()) {
+
+            // показываем spinner
+            progressBar.visibility = View.VISIBLE
+
             iTunesService.search(text).enqueue(object : Callback<ITunesResponse> {
                 override fun onResponse(
                     call: Call<ITunesResponse>,
                     response: Response<ITunesResponse>
                 ) {
+                    progressBar.visibility = View.GONE // прячем progressBar
+
                     if (response.code() == 200) {
                         tracks.clear()
                         if (response.body()?.resultCount!! > 0) {
@@ -211,6 +232,7 @@ class SearchActivity : AppCompatActivity() {
                         "string",
                         packageName
                     )
+                    progressBar.visibility = View.GONE
                     showMessage(textId = errorTextId, imageId = errorIconId, showButton = true)
                 }
             })

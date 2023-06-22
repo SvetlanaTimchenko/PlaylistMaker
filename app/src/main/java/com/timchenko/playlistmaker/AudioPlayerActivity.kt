@@ -22,6 +22,15 @@ import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+
+        private const val DELAY_MS = 1000L
+    }
+
     private lateinit var track: Track
     private lateinit var country : TextView
     private lateinit var gender : TextView
@@ -40,15 +49,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     private var playIconId: Int = 0
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var playerRunnable: Runnable
-
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-
-        private const val DELAY = 1000L
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,7 +161,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun startTimer(duration: Long) {
         val startTime = System.currentTimeMillis()
-        playerRunnable = createUpdateTimerTask(startTime, duration * DELAY)
+        playerRunnable = createUpdateTimerTask(startTime, duration * DELAY_MS)
         handler.post(playerRunnable)
     }
 
@@ -176,9 +176,9 @@ class AudioPlayerActivity : AppCompatActivity() {
                 if (remainingTime > 0) {
                     // Если всё ещё отсчитываем секунды —
                     // обновляем UI и снова планируем задачу
-                    val seconds = remainingTime / DELAY
+                    val seconds = remainingTime / DELAY_MS
                     timeBar.text = String.format("%02d:%02d", seconds / 60, seconds % 60)
-                    handler.postDelayed(this, DELAY)
+                    handler.postDelayed(this, DELAY_MS)
                 } else {
                     pausePlayer()
                 }

@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 // и модифицируем под работу со списком из 10 последних треков, которые просматривали
 class SearchResultsAdapter() : RecyclerView.Adapter<TrackViewHolder> () {
 
-    var tracks = ArrayList<Track>()
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
-
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
+    var tracks = ArrayList<Track>()
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater

@@ -41,8 +41,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var inputEditText: EditText
     private lateinit var progressBar: ProgressBar
     private lateinit var rvTracks: RecyclerView
-    private var errorIconId: Int = 0
-    private var errorTextId: Int = 0
     private lateinit var previousRequest: String
 
     private val searchResultsAdapter = SearchResultsAdapter()
@@ -145,7 +143,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         listener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
-            if (key == SEARCH_HISTORY) {
+            if (key == SearchHistory.SEARCH_HISTORY_KEY) {
                 showSearchHistory(searchHistory)
             }
         }
@@ -194,47 +192,17 @@ class SearchActivity : AppCompatActivity() {
                             rvTracks.visibility = View.VISIBLE
                         }
                         else {
-                            errorIconId = resources.getIdentifier(
-                                "il_search_error",
-                                "drawable",
-                                packageName
-                            )
-                            errorTextId = resources.getIdentifier(
-                                "nothing_found",
-                                "string",
-                                packageName
-                            )
-                            showMessage(textId = errorTextId, imageId = errorIconId)
+                            showMessage(textId = R.string.nothing_found, imageId = R.drawable.il_search_error)
                         }
                     }
                     else {
-                        errorIconId = resources.getIdentifier(
-                            "il_search_connect",
-                            "drawable",
-                            packageName
-                        )
-                        errorTextId = resources.getIdentifier(
-                            "no_connetion",
-                            "string",
-                            packageName
-                        )
-                        showMessage(textId = errorTextId, imageId = errorIconId, showButton = true)
+                        showMessage(textId = R.string.no_connetion, imageId = R.drawable.il_search_connect, showButton = true)
                     }
                 }
 
                 override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {
-                    errorIconId = resources.getIdentifier(
-                        "il_search_connect",
-                        "drawable",
-                        packageName
-                    )
-                    errorTextId = resources.getIdentifier(
-                        "no_connetion",
-                        "string",
-                        packageName
-                    )
                     progressBar.visibility = View.GONE
-                    showMessage(textId = errorTextId, imageId = errorIconId, showButton = true)
+                    showMessage(textId = R.string.no_connetion, imageId = R.drawable.il_search_connect, showButton = true)
                 }
             })
         }

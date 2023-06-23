@@ -45,7 +45,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var timeBar: TextView
     private val audioPlayerInteractor : AudioPlayerInteractor =
         Creator.provideAudioPlayerInteractor()
-    private var playIconId: Int = 0
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var playerRunnable: Runnable
 
@@ -127,9 +126,8 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-//        mediaPlayer.release()
         audioPlayerInteractor.shutDownPlayer()
-        handler.removeCallbacks(playerRunnable)
+        handler.removeCallbacksAndMessages(null)
     }
 
     private fun playbackControl() {
@@ -142,13 +140,11 @@ class AudioPlayerActivity : AppCompatActivity() {
             audioPlayerInteractor.switchPlayer { state ->
                 when (state) {
                     State.PAUSED, State.PREPARED -> {
-                        playIconId = resources.getIdentifier("buttonplay", "drawable", packageName)
-                        play.setImageResource(playIconId)
+                        play.setImageResource(R.drawable.buttonplay)
                         handler.removeCallbacks(playerRunnable)
                     }
                     State.PLAYING -> {
-                        playIconId = resources.getIdentifier("buttonpause", "drawable", packageName)
-                        play.setImageResource(playIconId)
+                        play.setImageResource(R.drawable.buttonpause)
                         startTimer(secondsCount)
                     }
                     else -> {}
@@ -186,9 +182,8 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun pausePlayer() {
         audioPlayerInteractor.pausePlayer()
-        playIconId = resources.getIdentifier("buttonplay", "drawable", packageName)
-        play.setImageResource(playIconId)
-        handler.removeCallbacks(playerRunnable)
+        play.setImageResource(R.drawable.buttonplay)
+        handler.removeCallbacksAndMessages(null)
     }
 
     private fun <T : Serializable?> getSerializable(name: String, clazz: Class<T>): T

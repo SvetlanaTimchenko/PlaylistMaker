@@ -4,10 +4,13 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-
-const val SEARCH_HISTORY = ""
+import com.timchenko.playlistmaker.domain.models.Track
 
 class SearchHistory(sharedPrefs: SharedPreferences) {
+
+    companion object {
+        const val SEARCH_HISTORY_KEY = "SEARCH_HISTORY_KEY"
+    }
 
     private val localSharedPrefs = sharedPrefs
     private var tracks = ArrayList<Track>()
@@ -28,11 +31,11 @@ class SearchHistory(sharedPrefs: SharedPreferences) {
     }
 
     private fun saveToHistory(tracks: ArrayList<Track>) {
-        editor.putString(SEARCH_HISTORY, Gson().toJson(tracks)).commit()
+        editor.putString(SEARCH_HISTORY_KEY, Gson().toJson(tracks)).commit()
     }
 
     fun getFromHistory(): ArrayList<Track> {
-        val stringTracks = localSharedPrefs.getString(SEARCH_HISTORY, null)
+        val stringTracks = localSharedPrefs.getString(SEARCH_HISTORY_KEY, null)
 
         if (stringTracks != null) {
             return Gson().fromJson<ArrayList<Track>>(stringTracks, object :
@@ -42,7 +45,7 @@ class SearchHistory(sharedPrefs: SharedPreferences) {
     }
 
     fun clearHistory() {
-        editor.remove(SEARCH_HISTORY).commit()
+        editor.remove(SEARCH_HISTORY_KEY).commit()
     }
 
 }

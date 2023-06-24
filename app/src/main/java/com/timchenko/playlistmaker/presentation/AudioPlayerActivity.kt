@@ -1,6 +1,5 @@
-package com.timchenko.playlistmaker
+package com.timchenko.playlistmaker.presentation
 
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.timchenko.playlistmaker.Creator
+import com.timchenko.playlistmaker.R
+import com.timchenko.playlistmaker.domain.AudioPlayerInteractor
+import com.timchenko.playlistmaker.domain.models.State
+import com.timchenko.playlistmaker.domain.models.Track
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -23,11 +27,6 @@ import java.util.Locale
 class AudioPlayerActivity : AppCompatActivity() {
 
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-
         private const val DELAY_MS = 1000L
     }
 
@@ -44,21 +43,14 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var play: ImageButton
     private lateinit var timeBar: TextView
-    private var mediaPlayer = MediaPlayer()
-    private var playerState = STATE_DEFAULT
-    private var playIconId: Int = 0
+    private val audioPlayerInteractor : AudioPlayerInteractor =
+        Creator.provideAudioPlayerInteractor()
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var playerRunnable: Runnable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
-
-        // реализация клика на кнопку Назад
-        val buttonBack = findViewById<ImageView>(R.id.back)
-        buttonBack.setOnClickListener {
-            this.finish()
-        }
 
         // проигрыватель
         play = findViewById(R.id.playBtn)
@@ -108,9 +100,23 @@ class AudioPlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(resources.getDimensionPixelOffset(R.dimen.value_8)))
             .into(this.findViewById(R.id.trackCover))
 
+        play.isEnabled = false
+
         // медиаплеер
-        mediaPlayer.setDataSource(track.previewUrl)
-        preparePlayer()
+        audioPlayerInteractor.preparePlayer(track.previewUrl) { state ->
+            when (state) {
+                State.PREPARED -> {
+                    play.isEnabled = true
+                }
+                else -> {}
+            }
+        }
+
+        // реализация клика на кнопку Назад
+        val buttonBack = findViewById<ImageView>(R.id.back)
+        buttonBack.setOnClickListener {
+            this.finish()
+        }
     }
 
     override fun onPause() {
@@ -120,42 +126,30 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
-    }
-
-    private fun preparePlayer() {
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
-        }
+        audioPlayerInteractor.shutDownPlayer()
+        handler.removeCallbacksAndMessages(null)
     }
 
     private fun playbackControl() {
-        when(playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
-    }
-
-    private fun startPlayer() {
         val secondsCount = timeBar.text
             .toString()
             .replace(":", "")
             .toLong()
 
         if (secondsCount > 0) {
-            mediaPlayer.start()
-            playIconId = resources.getIdentifier("buttonpause", "drawable", packageName)
-            play.setImageResource(playIconId)
-            playerState = STATE_PLAYING
-            startTimer(secondsCount)
+            audioPlayerInteractor.switchPlayer { state ->
+                when (state) {
+                    State.PAUSED, State.PREPARED -> {
+                        play.setImageResource(R.drawable.buttonplay)
+                        handler.removeCallbacks(playerRunnable)
+                    }
+                    State.PLAYING -> {
+                        play.setImageResource(R.drawable.buttonpause)
+                        startTimer(secondsCount)
+                    }
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -187,11 +181,9 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
-        playIconId = resources.getIdentifier("buttonplay", "drawable", packageName)
-        play.setImageResource(playIconId)
-        playerState = STATE_PAUSED
-        handler.removeCallbacks(playerRunnable)
+        audioPlayerInteractor.pausePlayer()
+        play.setImageResource(R.drawable.buttonplay)
+        handler.removeCallbacksAndMessages(null)
     }
 
     private fun <T : Serializable?> getSerializable(name: String, clazz: Class<T>): T

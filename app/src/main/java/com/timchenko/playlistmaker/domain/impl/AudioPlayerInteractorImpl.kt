@@ -1,8 +1,8 @@
 package com.timchenko.playlistmaker.domain.impl
 
 import com.timchenko.playlistmaker.domain.AudioPlayerInteractor
-import com.timchenko.playlistmaker.domain.MediaPlayerRepository
 import com.timchenko.playlistmaker.domain.models.State
+import com.timchenko.playlistmaker.domain.repository.MediaPlayerRepository
 
 class AudioPlayerInteractorImpl(
     private val medialPlayerRepository : MediaPlayerRepository

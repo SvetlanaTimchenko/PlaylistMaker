@@ -8,10 +8,6 @@ import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.domain.repository.SearchHistoryRepository
 
 class SearchHistoryRepositoryImpl(context: Context) : SearchHistoryRepository {
-    companion object {
-        const val SHARED_PREFS = "playlist_maker"
-        const val SEARCH_HISTORY_KEY = "SEARCH_HISTORY_KEY"
-    }
 
     private var sharedPrefs = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
     private val localSharedPrefs = sharedPrefs
@@ -20,7 +16,7 @@ class SearchHistoryRepositoryImpl(context: Context) : SearchHistoryRepository {
 
     override fun addTrack(track: Track) {
         tracks = getFromHistory()
-        if (tracks.size < 10) {
+        if (tracks.size < MAX_NUMBER_OF_TRACKS_IN_HISTORY) {
             if (tracks.contains(track)) {
                 tracks.remove(track)
             }
@@ -48,5 +44,11 @@ class SearchHistoryRepositoryImpl(context: Context) : SearchHistoryRepository {
 
     override fun clearHistory() {
         editor.remove(SEARCH_HISTORY_KEY).commit()
+    }
+
+    companion object {
+        const val SHARED_PREFS = "playlist_maker"
+        const val SEARCH_HISTORY_KEY = "SEARCH_HISTORY_KEY"
+        const val MAX_NUMBER_OF_TRACKS_IN_HISTORY = 10
     }
 }

@@ -18,7 +18,7 @@ import com.timchenko.playlistmaker.presentation.mapper.TrackMapper
 import com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerActivity
 import com.timchenko.playlistmaker.presentation.search.SearchViewModel
 
-class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
+class SearchActivity : AppCompatActivity() {
 
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var searchResultsAdapter: TrackAdapter
@@ -45,8 +45,8 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        trackAdapter = TrackAdapter(this)
-        searchResultsAdapter = TrackAdapter(this)
+        trackAdapter = TrackAdapter(setAdapterListener())
+        searchResultsAdapter = TrackAdapter(setAdapterListener())
 
         binding.recyclerTracks.adapter = trackAdapter
 
@@ -136,14 +136,18 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         return super.dispatchTouchEvent(ev)
     }
 
-    override fun onClick(track: Track) {
-        // добавляем в историю поиска
-        viewModel.onClick(track)
+    private fun setAdapterListener(): TrackAdapter.Listener {
+        return object : TrackAdapter.Listener {
+            override fun onClick(track: Track) {
+                // добавляем в историю поиска
+                viewModel.onClick(track)
 
-        // открываем аудиоплеер
-        val displayIntent = Intent(this, AudioPlayerActivity::class.java)
-        displayIntent.putExtra("track", TrackMapper.map(track))
-        startActivity(displayIntent)
+                // открываем аудиоплеер
+                val displayIntent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                displayIntent.putExtra("track", TrackMapper.map(track))
+                startActivity(displayIntent)
+            }
+        }
     }
 
     private fun render(state: TracksState) {

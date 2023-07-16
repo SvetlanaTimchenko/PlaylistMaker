@@ -10,12 +10,15 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
     companion object {
         const val SHARED_PREFS = "playlist_maker"
         const val NIGHT_THEME = "dark_mode"
+        private val map = ThemeSettings.values().associateBy(ThemeSettings::darkTheme)
+        fun getThemeFromInt(type: Int) = map[type]
     }
 
     private var sharedPrefs = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
 
     override fun getThemeSettings(): ThemeSettings {
-        return ThemeSettings(darkTheme = sharedPrefs.getInt(NIGHT_THEME, -1))
+        val theme = sharedPrefs.getInt(NIGHT_THEME, -1)
+        return getThemeFromInt(theme) ?: ThemeSettings.SYSTEM_DEFAULT
     }
 
     override fun updateThemeSetting(settings: ThemeSettings) {

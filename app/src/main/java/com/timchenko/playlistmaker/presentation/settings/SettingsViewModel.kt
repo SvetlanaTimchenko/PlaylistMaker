@@ -16,10 +16,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     fun updateThemeSettings(checked: Boolean) {
         if (checked) {
-            settingsInteractor.updateThemeSetting(ThemeSettings(darkTheme = 2))
+            settingsInteractor.updateThemeSetting(ThemeSettings.DARK)
         }
         else {
-            settingsInteractor.updateThemeSetting(ThemeSettings(darkTheme = 1))
+            settingsInteractor.updateThemeSetting(ThemeSettings.LIGHT)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.timchenko.playlistmaker.domain
+package com.timchenko.playlistmaker.domain.repository
 
 import com.timchenko.playlistmaker.domain.models.State
 

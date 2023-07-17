@@ -1,12 +1,13 @@
-package com.timchenko.playlistmaker
+package com.timchenko.playlistmaker.ui.main
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-
-const val SHARED_PREFS = "playlist_maker"
-const val NIGHT_THEME = "system"
+import com.timchenko.playlistmaker.ui.media.MediaActivity
+import com.timchenko.playlistmaker.R
+import com.timchenko.playlistmaker.ui.search.SearchActivity
+import com.timchenko.playlistmaker.ui.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

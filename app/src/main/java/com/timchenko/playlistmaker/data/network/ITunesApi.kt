@@ -1,5 +1,6 @@
-package com.timchenko.playlistmaker
+package com.timchenko.playlistmaker.data.network
 
+import com.timchenko.playlistmaker.data.dto.ITunesResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

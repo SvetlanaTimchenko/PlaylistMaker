@@ -1,12 +1,12 @@
-package com.timchenko.playlistmaker.domain.models
+package com.timchenko.playlistmaker.data.dto
 
 import java.io.Serializable
 
-data class Track(
+data class TrackDto(
     val trackId: Int,
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
-    val trackTime: String, // Продолжительность трека в формате mm:ss
+    val trackTimeMillis: Int, // Продолжительность трека: миллисекунды
     val artworkUrl100: String, // Ссылка на изображение обложки
     val collectionName: String, // Название альбома
     val releaseDate: String, // Год выпуска трека

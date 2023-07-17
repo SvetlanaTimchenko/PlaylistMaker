@@ -1,14 +1,13 @@
-package com.timchenko.playlistmaker
+package com.timchenko.playlistmaker.ui.search
 
-import android.icu.text.SimpleDateFormat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.domain.models.Track
-import java.util.Locale
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackName: TextView = itemView.findViewById(R.id.trackName)
@@ -18,7 +17,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(item: Track) {
         trackName.text = item.trackName
         cover.contentDescription = item.artistName + " : " + item.trackName
-        description.text = item.artistName + " \u2022 " + SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTime)
+        description.text = item.artistName + " \u2022 " + item.trackTime
 
         Glide
             .with(itemView)

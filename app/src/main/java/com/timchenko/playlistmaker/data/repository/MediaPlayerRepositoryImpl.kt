@@ -1,7 +1,7 @@
-package com.timchenko.playlistmaker.data
+package com.timchenko.playlistmaker.data.repository
 
 import android.media.MediaPlayer
-import com.timchenko.playlistmaker.domain.MediaPlayerRepository
+import com.timchenko.playlistmaker.domain.repository.MediaPlayerRepository
 import com.timchenko.playlistmaker.domain.models.State
 
 class MediaPlayerRepositoryImpl : MediaPlayerRepository {

@@ -1,20 +1,13 @@
 package com.timchenko.playlistmaker.data.repository
 
-import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import com.timchenko.playlistmaker.domain.models.ThemeSettings
 import com.timchenko.playlistmaker.domain.repository.SettingsRepository
 
-class SettingsRepositoryImpl(context: Context) : SettingsRepository {
-
-    companion object {
-        const val SHARED_PREFS = "playlist_maker"
-        const val NIGHT_THEME = "dark_mode"
-        private val map = ThemeSettings.values().associateBy(ThemeSettings::darkTheme)
-        fun getThemeFromInt(type: Int) = map[type]
-    }
-
-    private var sharedPrefs = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+class SettingsRepositoryImpl(
+    private var sharedPrefs: SharedPreferences
+) : SettingsRepository {
 
     override fun getThemeSettings(): ThemeSettings {
         val theme = sharedPrefs.getInt(NIGHT_THEME, -1)
@@ -36,5 +29,11 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
                 }
             }
         )
+    }
+
+    companion object {
+        const val NIGHT_THEME = "dark_mode"
+        private val map = ThemeSettings.values().associateBy(ThemeSettings::darkTheme)
+        fun getThemeFromInt(type: Int) = map[type]
     }
 }

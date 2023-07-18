@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.timchenko.playlistmaker.R
@@ -12,13 +11,12 @@ import com.timchenko.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.timchenko.playlistmaker.presentation.audioplayer.AudioPlayerViewModel
 import com.timchenko.playlistmaker.presentation.models.TrackDetails
 import java.io.Serializable
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: AudioPlayerViewModel
     private lateinit var binding: ActivityAudioPlayerBinding
-
+    private val viewModel: AudioPlayerViewModel by viewModel()
     private lateinit var trackDetails: TrackDetails
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +26,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         trackDetails = getSerializable("track", TrackDetails::class.java)
 
-        viewModel = ViewModelProvider(this) [AudioPlayerViewModel::class.java]
         viewModel.observePlayButtonState().observe(this) {
             updatePlayButton(it)
         }

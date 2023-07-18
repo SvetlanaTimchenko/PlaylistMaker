@@ -7,10 +7,7 @@ import com.timchenko.playlistmaker.data.NetworkClient
 import com.timchenko.playlistmaker.data.dto.Response
 import com.timchenko.playlistmaker.data.dto.TrackSearchRequest
 
-class RetrofitNetworkClient(
-    private val iTunesApi: ITunesApi,
-    private val context: Context
-    ) : NetworkClient {
+class RetrofitNetworkClient(private val context: Context) : NetworkClient {
 
     override fun doRequest(dto: Any): Response {
         if (!isConnected()) {
@@ -20,7 +17,7 @@ class RetrofitNetworkClient(
             return Response().apply { resultCode = 400 }
         }
 
-        val response = iTunesApi.search(dto.expression).execute()
+        val response = RetrofitClient.api.search(dto.expression).execute()
         val body = response.body() ?: Response()
 
         return body.apply { resultCode = response.code() }

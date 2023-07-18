@@ -7,10 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.timchenko.playlistmaker.domain.AudioPlayerInteractor
 import com.timchenko.playlistmaker.domain.models.State
+import com.timchenko.playlistmaker.util.Creator
 
-class AudioPlayerViewModel(
-    private val audioPlayerInteractor: AudioPlayerInteractor
-) : ViewModel() {
+class AudioPlayerViewModel : ViewModel() {
+
+    private val audioPlayerInteractor : AudioPlayerInteractor = Creator.provideAudioPlayerInteractor()
 
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var playerRunnable: Runnable

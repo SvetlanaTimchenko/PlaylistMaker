@@ -1,21 +1,25 @@
 package com.timchenko.playlistmaker.presentation.search
 
+import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.timchenko.playlistmaker.domain.SearchHistoryInteractor
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.timchenko.playlistmaker.domain.TracksInteractor
 import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.ui.search.TracksState
+import com.timchenko.playlistmaker.util.Creator
 
-class SearchViewModel(
-    private val tracksInteractor: TracksInteractor,
-    private val searchHistoryInteractor: SearchHistoryInteractor
-): ViewModel() {
+class SearchViewModel(application: Application): AndroidViewModel(application) {
 
+    private val tracksInteractor by lazy { Creator.provideTracksInteractor(context = getApplication<Application>()) }
+    private val searchHistoryInteractor by lazy { Creator.provideSearchHistoryInteractor(context = getApplication<Application>()) }
     private val handler = Handler(Looper.getMainLooper())
 
     private val stateLiveData = MutableLiveData<TracksState>()
@@ -86,6 +90,12 @@ class SearchViewModel(
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
+
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                SearchViewModel(this[APPLICATION_KEY] as Application)
+            }
+        }
     }
 
 }

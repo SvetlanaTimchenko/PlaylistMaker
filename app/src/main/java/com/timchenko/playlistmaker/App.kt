@@ -1,21 +1,18 @@
 package com.timchenko.playlistmaker
 
 import android.app.Application
-import com.timchenko.playlistmaker.di.dataModule
-import com.timchenko.playlistmaker.di.interactorModule
-import com.timchenko.playlistmaker.di.repositoryModule
-import com.timchenko.playlistmaker.di.viewModelModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import com.timchenko.playlistmaker.domain.models.ThemeSettings
+import com.timchenko.playlistmaker.util.Creator
 
 class App : Application() {
+
+    private lateinit var systemSettings: ThemeSettings
+    private val settingsInteractor by lazy { Creator.provideSettingsInteractor(context = applicationContext) }
 
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            androidContext(this@App)
-            modules(dataModule, repositoryModule, interactorModule, viewModelModule)
-        }
+        systemSettings = settingsInteractor.getThemeSettings()
+        settingsInteractor.updateThemeSetting(systemSettings)
     }
 }

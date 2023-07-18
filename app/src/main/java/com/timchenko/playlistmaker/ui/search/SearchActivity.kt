@@ -10,21 +10,20 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.databinding.ActivitySearchBinding
 import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.presentation.mapper.TrackMapper
 import com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerActivity
 import com.timchenko.playlistmaker.presentation.search.SearchViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySearchBinding
-    private val viewModel: SearchViewModel by viewModel()
-
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var searchResultsAdapter: TrackAdapter
+    private lateinit var binding: ActivitySearchBinding
+    private lateinit var viewModel: SearchViewModel
 
     private lateinit var previousRequest: String
 
@@ -32,8 +31,8 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory()) [SearchViewModel::class.java]
 
         viewModel.observeState().observe(this) {
             render(it)
@@ -42,6 +41,9 @@ class SearchActivity : AppCompatActivity() {
         viewModel.observeHistoryState().observe(this) {
             showSearchHistory(it)
         }
+
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         trackAdapter = TrackAdapter(setAdapterListener())
         searchResultsAdapter = TrackAdapter(setAdapterListener())
@@ -179,11 +181,6 @@ class SearchActivity : AppCompatActivity() {
     private fun showEmpty() {
         binding.errorSearchImage.setImageResource(R.drawable.il_search_error)
         binding.errorSearchText.setText(R.string.nothing_found)
-        binding.placeholderMessage.visibility = View.VISIBLE
-        binding.progressBar.visibility = View.GONE
-        binding.recyclerTracks.visibility = View.GONE
-        binding.searchPrefs.visibility = View.GONE
-
         binding.refreshSearch.visibility = View.GONE
     }
 

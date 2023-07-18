@@ -4,10 +4,11 @@ import android.media.MediaPlayer
 import com.timchenko.playlistmaker.domain.repository.MediaPlayerRepository
 import com.timchenko.playlistmaker.domain.models.State
 
-class MediaPlayerRepositoryImpl : MediaPlayerRepository {
+class MediaPlayerRepositoryImpl(
+    private val mediaPlayer: MediaPlayer
+) : MediaPlayerRepository {
 
     private var playerState = State.DEFAULT
-    private var mediaPlayer = MediaPlayer()
 
     override fun preparePlayer(url : String, onStateChanged : (s: State) -> Unit) {
         mediaPlayer.setDataSource(url)

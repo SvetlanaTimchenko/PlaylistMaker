@@ -1,16 +1,16 @@
 package com.timchenko.playlistmaker.data.repository
 
-import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.domain.repository.SearchHistoryRepository
 
-class SearchHistoryRepositoryImpl(context: Context) : SearchHistoryRepository {
+class SearchHistoryRepositoryImpl(
+    private val localSharedPrefs: SharedPreferences,
+    private val gson: Gson
+) : SearchHistoryRepository {
 
-    private var sharedPrefs = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
-    private val localSharedPrefs = sharedPrefs
     private var tracks = ArrayList<Track>()
     private val editor: SharedPreferences.Editor = localSharedPrefs.edit()
 
@@ -29,7 +29,7 @@ class SearchHistoryRepositoryImpl(context: Context) : SearchHistoryRepository {
     }
 
     private fun saveToHistory(tracks: ArrayList<Track>) {
-        editor.putString(SEARCH_HISTORY_KEY, Gson().toJson(tracks)).commit()
+        editor.putString(SEARCH_HISTORY_KEY, gson.toJson(tracks)).commit()
     }
 
     override fun getFromHistory(): ArrayList<Track> {
@@ -47,7 +47,6 @@ class SearchHistoryRepositoryImpl(context: Context) : SearchHistoryRepository {
     }
 
     companion object {
-        const val SHARED_PREFS = "playlist_maker"
         const val SEARCH_HISTORY_KEY = "SEARCH_HISTORY_KEY"
         const val MAX_NUMBER_OF_TRACKS_IN_HISTORY = 10
     }

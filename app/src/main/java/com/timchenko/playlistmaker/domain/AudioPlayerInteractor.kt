@@ -3,9 +3,10 @@ package com.timchenko.playlistmaker.domain
 import com.timchenko.playlistmaker.domain.models.State
 
 interface AudioPlayerInteractor {
-    fun preparePlayer(url : String, onStateChanged : (s: State) -> Unit)
+    fun preparePlayer(url:String?, onCompletePlaying:() -> Unit)
     fun startPlayer()
     fun pausePlayer()
-    fun switchPlayer(onStateChangedTo: (s: State) -> Unit)
-    fun shutDownPlayer()
+    fun releasePlayer()
+    fun getCurrentState(): State
+    fun getCurrentPosition(): Int
 }

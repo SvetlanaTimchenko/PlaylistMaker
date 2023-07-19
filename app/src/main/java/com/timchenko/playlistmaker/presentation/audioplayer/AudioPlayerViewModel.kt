@@ -7,92 +7,81 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.timchenko.playlistmaker.domain.AudioPlayerInteractor
 import com.timchenko.playlistmaker.domain.models.State
+import com.timchenko.playlistmaker.ui.audioplayer.PlayerState
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class AudioPlayerViewModel(
     private val audioPlayerInteractor: AudioPlayerInteractor
 ) : ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var playerRunnable: Runnable
 
-    private val playButtonState = MutableLiveData<Boolean>()
-    fun observePlayButtonState() : LiveData<Boolean> = playButtonState
+    private val stateLiveData = MutableLiveData<PlayerState>()
+    fun observeStateLiveData():LiveData<PlayerState> = stateLiveData
 
-    private val playButtonEnableState = MutableLiveData<Boolean>()
-    fun observePlayButtonEnabledState() : LiveData<Boolean> = playButtonEnableState
+    private val timeLiveData = MutableLiveData<String>()
+    fun observeTimeLiveData(): LiveData<String> = timeLiveData
 
-    private val secondsState = MutableLiveData<Long>()
-    fun observeSecondsState(): LiveData<Long> = secondsState
-
-    override fun onCleared() {
-        audioPlayerInteractor.shutDownPlayer()
-        handler.removeCallbacksAndMessages(null)
-    }
-
-    fun preparePlayer(previewUrl: String) {
-        audioPlayerInteractor.preparePlayer(url = previewUrl) { state ->
-            when (state) {
-                State.PREPARED -> {
-                    playButtonEnableState.postValue(true)
-                }
-                else -> {}
+    private val playerRunnable = object : Runnable {
+        override fun run() {
+            if (audioPlayerInteractor.getCurrentState() == State.PLAYING ) {
+                renderState(PlayerState.PLAYING)
+                timeLiveData.postValue(getDateFormat())
+                handler.postDelayed(this, DELAY_UPDATE_TIME_MS)
             }
         }
+    }
+
+    fun preparePlayer (previewUrl: String){
+        audioPlayerInteractor.preparePlayer(previewUrl) {
+            renderState(PlayerState.PREPARED)
+        }
+        renderState(PlayerState.PREPARED)
+    }
+
+    private fun startPlayer(){
+        audioPlayerInteractor.startPlayer()
+        renderState(PlayerState.PLAYING)
+        updateTime()
     }
 
     fun pausePlayer() {
         audioPlayerInteractor.pausePlayer()
-        playButtonState.postValue(false)
-        handler.removeCallbacksAndMessages(null)
+        renderState(PlayerState.PAUSED)
+        handler.removeCallbacks(playerRunnable)
     }
 
-    fun playbackControl(secondsCount: Long) {
-        if (secondsCount > 0) {
-            audioPlayerInteractor.switchPlayer { state ->
-                when (state) {
-                    State.PAUSED, State.PREPARED -> {
-                        playButtonState.postValue(false)
-                        handler.removeCallbacks(playerRunnable)
-                    }
-                    State.PLAYING -> {
-                        playButtonState.postValue(true)
-                        startTimer(secondsCount)
-                    }
-                    else -> {}
-                }
-            }
+    fun playbackControl(){
+        if(audioPlayerInteractor.getCurrentState() == State.PLAYING) {
+            pausePlayer()
+        }
+        else{
+            handler.removeCallbacks(playerRunnable)
+            startPlayer()
         }
     }
 
-
-
-    private fun startTimer(duration: Long) {
-        val startTime = System.currentTimeMillis()
-        playerRunnable = createUpdateTimerTask(startTime, duration * DELAY_MS)
-        handler.post(playerRunnable)
+    override fun onCleared() {
+        super.onCleared()
+        audioPlayerInteractor.releasePlayer()
+        handler.removeCallbacks(playerRunnable)
     }
 
-    private fun createUpdateTimerTask(startTime: Long, duration: Long): Runnable {
-        return object : Runnable {
-            override fun run() {
-                // Сколько прошло времени с момента запуска таймера
-                val elapsedTime = System.currentTimeMillis() - startTime
-                // Сколько осталось до конца
-                val remainingTime = duration - elapsedTime
-
-                if (remainingTime > 0) {
-                    // Если всё ещё отсчитываем секунды —
-                    // обновляем UI и снова планируем задачу
-                    secondsState.postValue(remainingTime / DELAY_MS)
-                    handler.postDelayed(this, DELAY_MS)
-                } else {
-                    pausePlayer()
-                }
-            }
-        }
+     private fun getDateFormat(): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault())
+            .format(audioPlayerInteractor.getCurrentPosition())
     }
 
-    companion object {
-        private const val DELAY_MS = 1000L
+    private fun updateTime() {
+        handler.postDelayed(playerRunnable, DELAY_UPDATE_TIME_MS)
+    }
+
+    fun renderState(state: PlayerState) {
+        stateLiveData.postValue(state)
+    }
+
+    companion object{
+        private const val DELAY_UPDATE_TIME_MS = 200L
     }
 }

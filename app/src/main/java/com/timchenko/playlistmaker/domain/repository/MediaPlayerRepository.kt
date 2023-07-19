@@ -1,11 +1,13 @@
 package com.timchenko.playlistmaker.domain.repository
 
-import com.timchenko.playlistmaker.domain.models.State
-
 interface MediaPlayerRepository {
-    fun preparePlayer(url : String, onStateChanged : (s: State) -> Unit)
+    fun preparePlayer(url: String?)
     fun startPlayer()
     fun pausePlayer()
-    fun switchPlayerState(onStateChangedTo: (s: State) -> Unit)
-    fun shutDownPlayer()
+    fun releasePlayer()
+    fun getCurrentPositionPlayer(): Int
+    fun setListenersPlayer(
+        onPrepared: () -> Unit,
+        onCompleteListener: () -> Unit
+    )
 }

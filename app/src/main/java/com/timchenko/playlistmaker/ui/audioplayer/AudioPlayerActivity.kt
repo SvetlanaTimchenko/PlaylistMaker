@@ -19,6 +19,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val viewModel: AudioPlayerViewModel by viewModel()
     private lateinit var trackDetails: TrackDetails
 
+    private lateinit var savedTimeTrack: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
@@ -26,14 +28,11 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         trackDetails = getSerializable("track", TrackDetails::class.java)
 
-        viewModel.observePlayButtonState().observe(this) {
-            updatePlayButton(it)
+        viewModel.observeStateLiveData().observe(this) {
+            render(it)
         }
-        viewModel.observeSecondsState().observe(this) {
-            updateTimer(it)
-        }
-        viewModel.observePlayButtonEnabledState().observe(this) {
-            enablePlayButton(it)
+        viewModel.observeTimeLiveData().observe(this) {
+            savedTimeTrack = it
         }
 
         binding.artist.text = trackDetails.artistName
@@ -60,15 +59,11 @@ class AudioPlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(resources.getDimensionPixelOffset(R.dimen.value_8)))
             .into(this.findViewById(R.id.trackCover))
 
-        enablePlayButton(enabled = false)
-
         // готовим медиаплеер
-        viewModel.preparePlayer(previewUrl = trackDetails.previewUrl)
+        viewModel.preparePlayer(trackDetails.previewUrl)
 
-        // проигрыватель
-        binding.timeBar.text = "00:30" // устанавливаем таймер для всех отрывков в 30 секунд
         binding.playBtn.setOnClickListener {
-            playbackControl()
+            viewModel.playbackControl()
         }
 
         // реализация клика на кнопку Назад
@@ -82,29 +77,32 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewModel.pausePlayer()
     }
 
-    private fun enablePlayButton(enabled: Boolean) {
-        binding.playBtn.isEnabled = enabled
-    }
-
-    private fun updatePlayButton(isPaused: Boolean) {
-        if (isPaused) {
-            binding.playBtn.setImageResource(R.drawable.buttonpause)
+    private fun render(state: PlayerState) {
+        when (state) {
+            PlayerState.PLAYING -> {
+                binding.playBtn.setImageResource(R.drawable.buttonpause)
+                binding.timeBar.text = savedTimeTrack
+            }
+            PlayerState.PAUSED -> {
+                binding.playBtn.setImageResource(R.drawable.buttonplay)
+            }
+            PlayerState.PREPARED, PlayerState.DEFAULT -> {
+                binding.playBtn.setImageResource(R.drawable.buttonplay)
+                binding.timeBar.text = getString(R.string.timebar_start)
+                savedTimeTrack = getString(R.string.timebar_start)
+            }
         }
-        else {
-            binding.playBtn.setImageResource(R.drawable.buttonplay)
-        }
     }
 
-    private fun updateTimer(seconds: Long) {
-        binding.timeBar.text = String.format("%02d:%02d", seconds / 60, seconds % 60)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putCharSequence(PLAY_TIME, binding.timeBar.text)
     }
 
-    private fun playbackControl() {
-        val secondsCount = binding.timeBar.text
-            .toString()
-            .replace(":", "")
-            .toLong()
-        viewModel.playbackControl(secondsCount = secondsCount)
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedTimeTrack = savedInstanceState.getCharSequence(PLAY_TIME).toString()
+
     }
 
     private fun <T : Serializable?> getSerializable(name: String, clazz: Class<T>): T
@@ -113,5 +111,9 @@ class AudioPlayerActivity : AppCompatActivity() {
             intent.getSerializableExtra(name, clazz)!!
         else
             intent.getSerializableExtra(name) as T
+    }
+
+    companion object {
+        const val PLAY_TIME = "PLAY_TIME"
     }
 }

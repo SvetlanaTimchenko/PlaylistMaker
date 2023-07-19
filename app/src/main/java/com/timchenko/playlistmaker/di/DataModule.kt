@@ -15,10 +15,12 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+private const val ITUNES_URL = "https://itunes.apple.com"
+
 val dataModule = module {
     single<ITunesApi> {
         Retrofit.Builder()
-            .baseUrl("https://itunes.apple.com")
+            .baseUrl(ITUNES_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ITunesApi::class.java)

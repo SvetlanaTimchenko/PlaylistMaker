@@ -204,15 +204,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showSearchHistory(tracks: ArrayList<Track>) {
-        searchResultsAdapter.tracks = tracks
-        binding.recyclerSearch.adapter = searchResultsAdapter
-        searchResultsAdapter.notifyDataSetChanged()
+        if (tracks.isEmpty()) {
+            binding.searchPrefs.visibility = View.GONE
+        }
+        else {
+            searchResultsAdapter.tracks = tracks
+            binding.recyclerSearch.adapter = searchResultsAdapter
+            searchResultsAdapter.notifyDataSetChanged()
 
-        binding.recyclerSearch.visibility = View.VISIBLE
-        binding.recyclerTracks.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
-        binding.placeholderMessage.visibility = View.GONE
-        binding.searchPrefs.visibility = View.VISIBLE
+            binding.recyclerSearch.visibility = View.VISIBLE
+            binding.recyclerTracks.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
+            binding.placeholderMessage.visibility = View.GONE
+            binding.searchPrefs.visibility = View.VISIBLE
+        }
+
     }
 
     companion object {

@@ -7,23 +7,37 @@ import com.timchenko.playlistmaker.domain.repository.MediaPlayerRepository
 class AudioPlayerInteractorImpl(
     private val medialPlayerRepository : MediaPlayerRepository
     ) : AudioPlayerInteractor {
-    override fun preparePlayer(url: String, onStateChanged : (s: State) -> Unit) {
-        medialPlayerRepository.preparePlayer(url, onStateChanged)
-    }
+
+    var state = State.DEFAULT
 
     override fun startPlayer() {
         medialPlayerRepository.startPlayer()
+        state = State.PLAYING
     }
 
     override fun pausePlayer() {
         medialPlayerRepository.pausePlayer()
+        state = State.PAUSED
     }
 
-    override fun switchPlayer(onStateChangedTo: (s: State) -> Unit) {
-        medialPlayerRepository.switchPlayerState(onStateChangedTo)
+    override fun preparePlayer(url: String?, onCompletePlaying: () -> Unit) {
+        if (state == State.DEFAULT) {
+            medialPlayerRepository.preparePlayer(url)
+            medialPlayerRepository.setListenersPlayer(
+                { state = State.PREPARED },
+                {
+                    state = State.PREPARED
+                    onCompletePlaying()
+                })
+        }
     }
 
-    override fun shutDownPlayer() {
-        medialPlayerRepository.shutDownPlayer()
+    override fun releasePlayer() {
+        medialPlayerRepository.releasePlayer()
+        state = State.DEFAULT
     }
+
+    override fun getCurrentState() = state
+
+    override fun getCurrentPosition(): Int = medialPlayerRepository.getCurrentPositionPlayer()
 }

@@ -28,6 +28,7 @@
     <string name="album">Альбом</string>
     <string name="time">Длительность</string>
     <string name="track_cover">Обложка трека</string>
+    <string name="timebar_start">00:00</string>
     <string name="like_button">Нравится трек?</string>
     <string name="play_button">Послушать</string>
     <string name="playlist_button">Сохраним?</string>

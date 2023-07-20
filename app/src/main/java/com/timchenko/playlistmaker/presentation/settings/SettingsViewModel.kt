@@ -1,18 +1,14 @@
 package com.timchenko.playlistmaker.presentation.settings
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
+import com.timchenko.playlistmaker.domain.SettingsInteractor
+import com.timchenko.playlistmaker.domain.SharingInteractor
 import com.timchenko.playlistmaker.domain.models.ThemeSettings
-import com.timchenko.playlistmaker.util.Creator
 
-class SettingsViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val settingsInteractor by lazy { Creator.provideSettingsInteractor(context = getApplication<Application>()) }
-    private val sharingInteractor by lazy { Creator.provideSharingInteractor(context = getApplication<Application>())}
+class SettingsViewModel(
+    private val settingsInteractor: SettingsInteractor,
+    private val sharingInteractor: SharingInteractor
+) : ViewModel() {
 
     fun updateThemeSettings(checked: Boolean) {
         if (checked) {
@@ -34,14 +30,4 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun openTerms(url: String) {
         sharingInteractor.openTerms(link = url)
     }
-
-    companion object {
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-    }
-
 }

@@ -6,13 +6,19 @@ import android.os.Bundle
 import android.widget.Button
 import com.timchenko.playlistmaker.ui.media.MediaActivity
 import com.timchenko.playlistmaker.R
+import com.timchenko.playlistmaker.presentation.main.MainViewModel
 import com.timchenko.playlistmaker.ui.search.SearchActivity
 import com.timchenko.playlistmaker.ui.settings.SettingsActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: MainViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        viewModel.setAppTheme()
 
         // реализация клика на кнопку Поиск
         val buttonSearch = findViewById<Button>(R.id.search_btn)

@@ -33,5 +33,12 @@
     <string name="like_button">Like the song?</string>
     <string name="play_button">Listen</string>
     <string name="playlist_button">Save?</string>
+    <string name="favorite_tracks">Favorite tracks</string>
+    <string name="favorites_empty">Your favorites is empty</string>
+    <string name="playlists">Playlists</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="playlists_empty">You have not created any playlist</string>
+
+
 
 </resources>

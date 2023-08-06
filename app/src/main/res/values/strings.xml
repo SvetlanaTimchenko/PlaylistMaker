@@ -32,6 +32,11 @@
     <string name="like_button">Нравится трек?</string>
     <string name="play_button">Послушать</string>
     <string name="playlist_button">Сохраним?</string>
+    <string name="favorite_tracks">Избранные треки</string>
+    <string name="favorites_empty">Ваша медиатека пуста</string>
+    <string name="playlists">Плейлисты</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="playlists_empty">Вы не создали ни одного плейлиста</string>
 
 
 </resources>

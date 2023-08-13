@@ -14,7 +14,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_marginStart">28dp</item>
+        <!--item name="android:layout_marginStart">28dp</item-->
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">22sp</item>
     </style>
@@ -83,5 +83,10 @@
         <item name="android:layout_height">51dp</item>
         <item name="android:background">@null</item>
         <item name="android:layout_marginBottom">29dp</item>
+    </style>
+
+    <style name="divider_context_nav_bar">
+        <item name="android:backgroundTint">#E6E8EB</item>
+        <item name="android:background">#E6E8EB</item>
     </style>
 </resources>

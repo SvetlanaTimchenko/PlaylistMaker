@@ -42,12 +42,11 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.timeVar.text = trackDetails.trackTime
         binding.yearVar.text = trackDetails.releaseYear
 
-        if (trackDetails.collectionName.isNotEmpty()) {
+        binding.albumGroup.visibility = View.GONE
+
+        trackDetails.collectionName?.let {
             binding.albumVar.text = trackDetails.collectionName
             binding.albumGroup.visibility = View.VISIBLE
-        }
-        else {
-            binding.albumGroup.visibility = View.GONE
         }
 
         // обложка

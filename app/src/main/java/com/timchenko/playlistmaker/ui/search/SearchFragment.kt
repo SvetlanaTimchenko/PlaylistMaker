@@ -194,8 +194,4 @@ class SearchFragment : Fragment() {
         }
 
     }
-
-    companion object {
-        const val SEARCH_EDITTEXT = "SEARCH_EDITTEXT"
-    }
 }

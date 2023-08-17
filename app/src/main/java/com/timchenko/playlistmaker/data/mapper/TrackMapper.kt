@@ -21,7 +21,7 @@ object TrackMapper {
         )
     }
 
-    private fun convertMillisToString(millis: Int): String {
+    private fun convertMillisToString(millis: Int?): String? {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(millis)
     }
 }

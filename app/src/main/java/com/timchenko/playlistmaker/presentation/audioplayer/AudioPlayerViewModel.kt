@@ -33,7 +33,7 @@ class AudioPlayerViewModel(
         }
     }
 
-    fun preparePlayer (previewUrl: String){
+    fun preparePlayer (previewUrl: String?){
         audioPlayerInteractor.preparePlayer(previewUrl) {
             renderState(PlayerState.PREPARED)
         }

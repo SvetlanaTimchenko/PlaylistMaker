@@ -22,7 +22,7 @@ object TrackMapper {
             previewUrl = track.previewUrl
         )
     }
-    private fun convertToYear(releaseDate: String): String {
+    private fun convertToYear(releaseDate: String?): String? {
         return SimpleDateFormat("yyyy", Locale.getDefault()).format(Date.from(Instant.parse(releaseDate)))
     }
 }

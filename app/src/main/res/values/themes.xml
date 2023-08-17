@@ -1,8 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/blue</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
@@ -14,4 +15,17 @@
         <!-- Customize your theme here. -->
         <item name="android:textColorHint">@color/fields_icons</item>
     </style>
+
+    <style name="BottomNavigation">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="backgroundTint">@null</item>
+        <item name="itemTextAppearanceInactive">@color/bottom_nav_tint</item>
+        <item name="itemTextAppearanceActive">@color/bottom_nav_tint</item>
+        <item name="itemIconTint">@color/bottom_nav_tint</item>
+        <item name="itemTextColor">@color/bottom_nav_tint</item>
+        <item name="enforceTextAppearance">true</item>
+        <item name="enforceMaterialTheme">true</item>
+    </style>
+
+
 </resources>

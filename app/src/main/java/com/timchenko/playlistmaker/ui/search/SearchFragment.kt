@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.databinding.FragmentSearchBinding
 import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.presentation.mapper.TrackMapper
 import com.timchenko.playlistmaker.presentation.search.SearchViewModel
 import com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerActivity
+import com.timchenko.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -22,8 +24,15 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModel()
 
-    private lateinit var trackAdapter: TrackAdapter
-    private lateinit var searchResultsAdapter: TrackAdapter
+    private val trackAdapter = TrackAdapter { track ->
+        onTrackClickDebounce(track)
+    }
+
+    private val searchResultsAdapter = TrackAdapter {
+        onTrackClickDebounce(it)
+    }
+
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private lateinit var previousRequest: String
 
@@ -45,8 +54,13 @@ class SearchFragment : Fragment() {
             showSearchHistory(it)
         }
 
-        trackAdapter = TrackAdapter(setAdapterListener())
-        searchResultsAdapter = TrackAdapter(setAdapterListener())
+        onTrackClickDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+            viewModel.onClick(track)
+
+            val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
+            displayIntent.putExtra("track", TrackMapper.map(track))
+            startActivity(displayIntent)
+        }
 
         binding.recyclerTracks.adapter = trackAdapter
 
@@ -107,20 +121,6 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         simpleTextWatcher?.let { binding.searchEditText.removeTextChangedListener(it) }
-    }
-
-    private fun setAdapterListener(): TrackAdapter.Listener {
-        return object : TrackAdapter.Listener {
-            override fun onClick(track: Track) {
-                // добавляем в историю поиска
-                viewModel.onClick(track)
-
-                // открываем аудиоплеер
-                val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-                displayIntent.putExtra("track", TrackMapper.map(track))
-                startActivity(displayIntent)
-            }
-        }
     }
 
     private fun render(state: TracksState) {
@@ -193,5 +193,9 @@ class SearchFragment : Fragment() {
             binding.searchPrefs.visibility = View.VISIBLE
         }
 
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

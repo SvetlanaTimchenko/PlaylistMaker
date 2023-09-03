@@ -19,8 +19,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val viewModel: AudioPlayerViewModel by viewModel()
     private lateinit var trackDetails: TrackDetails
 
-    private lateinit var savedTimeTrack: String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
@@ -28,12 +26,12 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         trackDetails = getSerializable("track", TrackDetails::class.java)
 
-        viewModel.observeStateLiveData().observe(this) {
-            render(it)
+        viewModel.observePlayerState().observe(this) {
+            binding.playBtn.isEnabled = it.isPlayButtonEnabled
+            binding.playBtn.setImageResource(it.buttonResource)
+            binding.timeBar.text = it.progress
         }
-        viewModel.observeTimeLiveData().observe(this) {
-            savedTimeTrack = it
-        }
+
 
         binding.artist.text = trackDetails.artistName
         binding.track.text = trackDetails.trackName
@@ -73,35 +71,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.pausePlayer()
-    }
-
-    private fun render(state: PlayerState) {
-        when (state) {
-            PlayerState.PLAYING -> {
-                binding.playBtn.setImageResource(R.drawable.buttonpause)
-                binding.timeBar.text = savedTimeTrack
-            }
-            PlayerState.PAUSED -> {
-                binding.playBtn.setImageResource(R.drawable.buttonplay)
-            }
-            PlayerState.PREPARED, PlayerState.DEFAULT -> {
-                binding.playBtn.setImageResource(R.drawable.buttonplay)
-                binding.timeBar.text = getString(R.string.timebar_start)
-                savedTimeTrack = getString(R.string.timebar_start)
-            }
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putCharSequence(PLAY_TIME, binding.timeBar.text)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        savedTimeTrack = savedInstanceState.getCharSequence(PLAY_TIME).toString()
-
+        viewModel.onPause()
     }
 
     private fun <T : Serializable?> getSerializable(name: String, clazz: Class<T>): T
@@ -110,9 +80,5 @@ class AudioPlayerActivity : AppCompatActivity() {
             intent.getSerializableExtra(name, clazz)!!
         else
             intent.getSerializableExtra(name) as T
-    }
-
-    companion object {
-        const val PLAY_TIME = "PLAY_TIME"
     }
 }

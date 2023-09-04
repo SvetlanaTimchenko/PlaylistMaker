@@ -16,7 +16,8 @@ import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.presentation.mapper.TrackMapper
 import com.timchenko.playlistmaker.presentation.search.SearchViewModel
 import com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerActivity
-import com.timchenko.playlistmaker.util.debounce
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -24,15 +25,19 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModel()
 
-    private val trackAdapter = TrackAdapter { track ->
-        onTrackClickDebounce(track)
+    private var isClickAllowed = true
+
+    private val trackAdapter = TrackAdapter {
+        if (clickDebounce()) {
+            switchToPlayer(it)
+        }
     }
 
     private val searchResultsAdapter = TrackAdapter {
-        onTrackClickDebounce(it)
+        if (clickDebounce()) {
+            switchToPlayer(it)
+        }
     }
-
-    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private lateinit var previousRequest: String
 
@@ -52,14 +57,6 @@ class SearchFragment : Fragment() {
 
         viewModel.observeHistoryState().observe(viewLifecycleOwner) {
             showSearchHistory(it)
-        }
-
-        onTrackClickDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
-            viewModel.onClick(track)
-
-            val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-            displayIntent.putExtra("track", TrackMapper.map(track))
-            startActivity(displayIntent)
         }
 
         binding.recyclerTracks.adapter = trackAdapter
@@ -193,6 +190,26 @@ class SearchFragment : Fragment() {
             binding.searchPrefs.visibility = View.VISIBLE
         }
 
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
+    private fun switchToPlayer(track: Track) {
+        viewModel.onClick(track)
+
+        val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
+        displayIntent.putExtra("track", TrackMapper.map(track))
+        startActivity(displayIntent)
     }
 
     companion object {

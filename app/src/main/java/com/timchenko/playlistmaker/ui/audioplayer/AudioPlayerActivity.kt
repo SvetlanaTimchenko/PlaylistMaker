@@ -19,6 +19,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val viewModel: AudioPlayerViewModel by viewModel()
     private lateinit var trackDetails: TrackDetails
 
+    private lateinit var savedTimeTrack: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
@@ -27,6 +29,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         trackDetails = getSerializable("track", TrackDetails::class.java)
 
         viewModel.observePlayerState().observe(this) {
+            savedTimeTrack = it.progress
             binding.playBtn.isEnabled = it.isPlayButtonEnabled
             binding.playBtn.setImageResource(it.buttonResource)
             binding.timeBar.text = it.progress
@@ -74,11 +77,26 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewModel.onPause()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putCharSequence(PLAY_TIME, binding.timeBar.text)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedTimeTrack = savedInstanceState.getCharSequence(PLAY_TIME).toString()
+
+    }
+
     private fun <T : Serializable?> getSerializable(name: String, clazz: Class<T>): T
     {
         return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             intent.getSerializableExtra(name, clazz)!!
         else
             intent.getSerializableExtra(name) as T
+    }
+
+    companion object {
+        const val PLAY_TIME = "PLAY_TIME"
     }
 }

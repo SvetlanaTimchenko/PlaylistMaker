@@ -28,15 +28,11 @@ class SearchFragment : Fragment() {
     private var isClickAllowed = true
 
     private val trackAdapter = TrackAdapter {
-        if (clickDebounce()) {
-            switchToPlayer(it)
-        }
+        switchToPlayer(it)
     }
 
     private val searchResultsAdapter = TrackAdapter {
-        if (clickDebounce()) {
-            switchToPlayer(it)
-        }
+        switchToPlayer(it)
     }
 
     private lateinit var previousRequest: String
@@ -205,11 +201,13 @@ class SearchFragment : Fragment() {
     }
 
     private fun switchToPlayer(track: Track) {
-        viewModel.onClick(track)
+        if (clickDebounce()) {
+            viewModel.onClick(track)
 
-        val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-        displayIntent.putExtra("track", TrackMapper.map(track))
-        startActivity(displayIntent)
+            val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
+            displayIntent.putExtra("track", TrackMapper.map(track))
+            startActivity(displayIntent)
+        }
     }
 
     companion object {

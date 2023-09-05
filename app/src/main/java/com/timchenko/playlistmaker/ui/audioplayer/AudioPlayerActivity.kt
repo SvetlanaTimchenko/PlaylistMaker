@@ -28,12 +28,13 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         trackDetails = getSerializable("track", TrackDetails::class.java)
 
-        viewModel.observeStateLiveData().observe(this) {
-            render(it)
+        viewModel.observePlayerState().observe(this) {
+            savedTimeTrack = it.progress
+            binding.playBtn.isEnabled = it.isPlayButtonEnabled
+            binding.playBtn.setImageResource(it.buttonResource)
+            binding.timeBar.text = it.progress
         }
-        viewModel.observeTimeLiveData().observe(this) {
-            savedTimeTrack = it
-        }
+
 
         binding.artist.text = trackDetails.artistName
         binding.track.text = trackDetails.trackName
@@ -73,24 +74,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.pausePlayer()
-    }
-
-    private fun render(state: PlayerState) {
-        when (state) {
-            PlayerState.PLAYING -> {
-                binding.playBtn.setImageResource(R.drawable.buttonpause)
-                binding.timeBar.text = savedTimeTrack
-            }
-            PlayerState.PAUSED -> {
-                binding.playBtn.setImageResource(R.drawable.buttonplay)
-            }
-            PlayerState.PREPARED, PlayerState.DEFAULT -> {
-                binding.playBtn.setImageResource(R.drawable.buttonplay)
-                binding.timeBar.text = getString(R.string.timebar_start)
-                savedTimeTrack = getString(R.string.timebar_start)
-            }
-        }
+        viewModel.onPause()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

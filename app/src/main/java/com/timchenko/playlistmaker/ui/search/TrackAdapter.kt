@@ -1,23 +1,14 @@
 package com.timchenko.playlistmaker.ui.search
 
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.domain.models.Track
 
-class TrackAdapter (private var listener: Listener) : RecyclerView.Adapter<TrackViewHolder> () {
+class TrackAdapter (private val listener: Listener) : RecyclerView.Adapter<TrackViewHolder> () {
 
     var tracks = ArrayList<Track>()
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
-
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater
             .from(parent.context)
@@ -30,9 +21,7 @@ class TrackAdapter (private var listener: Listener) : RecyclerView.Adapter<Track
         holder.bind(track)
 
         holder.itemView.setOnClickListener {
-            if (clickDebounce()) {
-                listener.onClick(track = track)
-            }
+            listener.onClick(track = track)
         }
     }
 
@@ -40,16 +29,7 @@ class TrackAdapter (private var listener: Listener) : RecyclerView.Adapter<Track
         return tracks.size
     }
 
-    private fun clickDebounce() : Boolean {
-        val  current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
-
-    interface Listener {
+    fun interface Listener {
         fun onClick(track: Track)
     }
 

@@ -7,18 +7,20 @@ import com.timchenko.playlistmaker.data.dto.TrackSearchRequest
 import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.domain.repository.TracksRepository
 import com.timchenko.playlistmaker.util.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
-    override fun searchTracks(expression: String): Resource<List<Track>> {
+    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
-        return when (response.resultCode) {
+        when (response.resultCode) {
             200 -> {
-                Resource.Success((response as ITunesResponse).results.map { trackDto ->
-                    TrackMapper.map(trackDto = trackDto)
-                })
+                    emit(Resource.Success((response as ITunesResponse).results.map { trackDto ->
+                        TrackMapper.map(trackDto = trackDto)
+                    }))
             }
             else -> {
-                Resource.Error(response.resultCode) // "Ошибка сервера"
+                emit(Resource.Error(response.resultCode)) // "Ошибка сервера"
             }
         }
     }

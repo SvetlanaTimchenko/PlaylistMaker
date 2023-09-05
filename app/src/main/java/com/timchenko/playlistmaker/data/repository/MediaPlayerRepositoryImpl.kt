@@ -36,6 +36,7 @@ class MediaPlayerRepositoryImpl(
         }
 
         mediaPlayer.setOnCompletionListener {
+            mediaPlayer.seekTo(0)
             onCompleteListener()
         }
     }

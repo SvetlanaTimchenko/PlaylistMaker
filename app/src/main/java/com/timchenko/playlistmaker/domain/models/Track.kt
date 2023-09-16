@@ -13,4 +13,10 @@ data class Track(
     val primaryGenreName: String? = null, // жанр
     val country: String? = null, // Страна исполнителя
     val previewUrl: String? = null, // отрывок трека
-) : Serializable
+    var isFavorite: Boolean = false
+) : Serializable {
+    /**
+     * Возвращает обновленный URL обложки размером 512х512
+     */
+    fun getCoverArtwork() = artworkUrl100?.replaceAfterLast('/',"512x512bb.jpg")
+}

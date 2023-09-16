@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.databinding.FragmentSearchBinding
 import com.timchenko.playlistmaker.domain.models.Track
-import com.timchenko.playlistmaker.presentation.mapper.TrackMapper
 import com.timchenko.playlistmaker.presentation.search.SearchViewModel
 import com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -22,13 +24,14 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModel()
 
+    private var isClickAllowed = true
 
     private val trackAdapter = TrackAdapter {
-        viewModel.onClick(it)
+        switchToPlayer(it)
     }
 
     private val searchResultsAdapter = TrackAdapter {
-        viewModel.onClick(it)
+        switchToPlayer(it)
     }
 
     private lateinit var previousRequest: String
@@ -42,17 +45,12 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
         viewModel.observeHistoryState().observe(viewLifecycleOwner) {
             showSearchHistory(it)
-        }
-
-        viewModel.observeDebounce().observe(viewLifecycleOwner) {
-            processIntent(it)
         }
 
         binding.recyclerTracks.adapter = trackAdapter
@@ -67,7 +65,6 @@ class SearchFragment : Fragment() {
                 }
                 previousRequest = s?.toString() ?: ""
                 viewModel.searchDebounce(changedText = previousRequest)
-
                 binding.searchPrefs.visibility = if (binding.searchEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
             }
 
@@ -96,8 +93,6 @@ class SearchFragment : Fragment() {
 
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
             viewModel.getSearchHistory()
-            binding.searchPrefs.visibility =
-                if (hasFocus && binding.searchEditText.text.isEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.refreshSearch.setOnClickListener {
@@ -111,6 +106,11 @@ class SearchFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getSearchHistory()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         simpleTextWatcher?.let { binding.searchEditText.removeTextChangedListener(it) }
@@ -122,7 +122,14 @@ class SearchFragment : Fragment() {
             is TracksState.Error -> showError()
             is TracksState.Empty -> showEmpty()
             is TracksState.Content -> showContent(state.tracks)
+            is TracksState.Default -> allGone()
         }
+    }
+
+    private fun allGone() {
+        binding.progressBar.visibility = View.GONE
+        binding.placeholderMessage.visibility = View.GONE
+        binding.recyclerTracks.visibility = View.GONE
     }
     private fun showLoading() {
         binding.progressBar.visibility = View.VISIBLE
@@ -138,7 +145,6 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.recyclerTracks.visibility = View.GONE
         binding.searchPrefs.visibility = View.GONE
-
         binding.refreshSearch.visibility = View.VISIBLE
     }
 
@@ -150,7 +156,6 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.recyclerTracks.visibility = View.GONE
         binding.searchPrefs.visibility = View.GONE
-
         binding.refreshSearch.visibility = View.GONE
     }
 
@@ -188,9 +193,29 @@ class SearchFragment : Fragment() {
 
     }
 
-    private fun processIntent(track: Track) {
-        val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-        displayIntent.putExtra("track", TrackMapper.map(track))
-        startActivity(displayIntent)
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
+    private fun switchToPlayer(track: Track) {
+        if (clickDebounce()) {
+            viewModel.onClick(track)
+
+            val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
+            displayIntent.putExtra("track", track)
+            startActivity(displayIntent)
+        }
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

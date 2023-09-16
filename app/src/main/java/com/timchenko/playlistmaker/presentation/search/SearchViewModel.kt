@@ -17,12 +17,7 @@ class SearchViewModel(
     private val searchHistoryInteractor: SearchHistoryInteractor
 ): ViewModel() {
 
-    private var isClickAllowed = true
-
     private var searchJob: Job? = null
-
-    private val debounceLiveData = MutableLiveData<Track>()
-    fun observeDebounce(): LiveData<Track> = debounceLiveData
 
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
@@ -52,6 +47,9 @@ class SearchViewModel(
                 }
             }
         }
+        else {
+            renderState(TracksState.Default)
+        }
     }
 
     private fun processSearchResult(foundTracks: List<Track>?, errorMessage: Int?) {
@@ -75,7 +73,10 @@ class SearchViewModel(
     }
 
     fun getSearchHistory() {
-        historyLiveData.postValue(searchHistoryInteractor.getFromHistory())
+        viewModelScope.launch {
+            val history = searchHistoryInteractor.getFromHistory()
+            historyLiveData.postValue(history)
+        }
     }
 
     fun clearHistory() {
@@ -83,22 +84,7 @@ class SearchViewModel(
     }
 
     fun onClick(track: Track) {
-        if (clickDebounce()) {
-            searchHistoryInteractor.addTrack(track) // добавляем трек в историю поиска
-            debounceLiveData.postValue(track)
-        }
-    }
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewModelScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
-        }
-        return current
+        searchHistoryInteractor.addTrack(track) // добавляем трек в историю поиска
     }
 
     private fun renderState(state: TracksState) {
@@ -107,6 +93,5 @@ class SearchViewModel(
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

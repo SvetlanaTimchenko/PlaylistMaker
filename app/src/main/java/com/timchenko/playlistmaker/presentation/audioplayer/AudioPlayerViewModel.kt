@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timchenko.playlistmaker.domain.AudioPlayerInteractor
+import com.timchenko.playlistmaker.domain.FavoriteInteractor
 import com.timchenko.playlistmaker.domain.models.State
+import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.ui.audioplayer.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -14,13 +16,17 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerViewModel(
-    private val audioPlayerInteractor: AudioPlayerInteractor
+    private val audioPlayerInteractor: AudioPlayerInteractor,
+    private val favoriteInteractor: FavoriteInteractor
 ) : ViewModel() {
 
     private var timerJob: Job? = null
 
     private val playerState = MutableLiveData<PlayerState>(PlayerState.Default())
     fun observePlayerState(): LiveData<PlayerState> = playerState
+
+    private var isFavourite = MutableLiveData<Boolean>()
+    fun observeFavoriteState(): LiveData<Boolean> = isFavourite
 
     override fun onCleared() {
         super.onCleared()
@@ -77,6 +83,21 @@ class AudioPlayerViewModel(
 
     private fun getCurrentPlayerPosition(): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(audioPlayerInteractor.getCurrentPosition()) ?: "00:00"
+    }
+
+    fun onFavoriteClicked(track: Track) {
+        if (track.isFavorite) {
+            viewModelScope.launch {
+                favoriteInteractor.delete(track)
+                isFavourite.postValue(false)
+            }
+        }
+        else {
+            viewModelScope.launch {
+                favoriteInteractor.add(track)
+                isFavourite.postValue(true)
+            }
+        }
     }
 
     companion object{

@@ -88,7 +88,6 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 android:paddingStart="@dimen/value_12"
-                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/track_item" />
 

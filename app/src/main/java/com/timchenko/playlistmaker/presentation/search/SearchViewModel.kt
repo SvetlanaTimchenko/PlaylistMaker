@@ -18,6 +18,7 @@ class SearchViewModel(
 ): ViewModel() {
 
     private var searchJob: Job? = null
+
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
 
@@ -46,6 +47,9 @@ class SearchViewModel(
                 }
             }
         }
+        else {
+            renderState(TracksState.Default)
+        }
     }
 
     private fun processSearchResult(foundTracks: List<Track>?, errorMessage: Int?) {
@@ -69,7 +73,10 @@ class SearchViewModel(
     }
 
     fun getSearchHistory() {
-        historyLiveData.postValue(searchHistoryInteractor.getFromHistory())
+        viewModelScope.launch {
+            val history = searchHistoryInteractor.getFromHistory()
+            historyLiveData.postValue(history)
+        }
     }
 
     fun clearHistory() {

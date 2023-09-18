@@ -2,9 +2,11 @@ package com.timchenko.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.google.gson.Gson
 import com.timchenko.playlistmaker.data.ExternalNavigator
 import com.timchenko.playlistmaker.data.NetworkClient
+import com.timchenko.playlistmaker.data.db.AppDatabase
 import com.timchenko.playlistmaker.data.impl.ExternalNavigatorImpl
 import com.timchenko.playlistmaker.data.network.ITunesApi
 import com.timchenko.playlistmaker.data.network.RetrofitNetworkClient
@@ -40,10 +42,14 @@ val dataModule = module {
     }
 
     single<SearchHistoryRepository> {
-        SearchHistoryRepositoryImpl(get(), get())
+        SearchHistoryRepositoryImpl(get(), get(), get())
     }
 
     single<ExternalNavigator> {
         ExternalNavigatorImpl(get())
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "playlist.db").build()
     }
 }

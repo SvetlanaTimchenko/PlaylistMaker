@@ -1,9 +1,12 @@
 package com.timchenko.playlistmaker.di
 
+import com.timchenko.playlistmaker.data.mapper.FavoriteMapper
+import com.timchenko.playlistmaker.data.repository.FavoriteRepositoryImpl
 import com.timchenko.playlistmaker.data.repository.MediaPlayerRepositoryImpl
 import com.timchenko.playlistmaker.data.repository.SearchHistoryRepositoryImpl
 import com.timchenko.playlistmaker.data.repository.SettingsRepositoryImpl
 import com.timchenko.playlistmaker.data.repository.TracksRepositoryImpl
+import com.timchenko.playlistmaker.domain.repository.FavoriteRepository
 import com.timchenko.playlistmaker.domain.repository.MediaPlayerRepository
 import com.timchenko.playlistmaker.domain.repository.SearchHistoryRepository
 import com.timchenko.playlistmaker.domain.repository.SettingsRepository
@@ -12,11 +15,11 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<TracksRepository> {
-        TracksRepositoryImpl(get())
+        TracksRepositoryImpl(get(), get())
     }
 
     single<SearchHistoryRepository> {
-        SearchHistoryRepositoryImpl(get(), get())
+        SearchHistoryRepositoryImpl(get(), get(), get())
     }
 
     factory<MediaPlayerRepository> {
@@ -25,5 +28,11 @@ val repositoryModule = module {
 
     single<SettingsRepository> {
         SettingsRepositoryImpl(get())
+    }
+
+    factory { FavoriteMapper() }
+
+    single<FavoriteRepository> {
+        FavoriteRepositoryImpl(get(), get())
     }
 }

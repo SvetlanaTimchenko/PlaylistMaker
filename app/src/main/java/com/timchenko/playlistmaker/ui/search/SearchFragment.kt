@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.databinding.FragmentSearchBinding
 import com.timchenko.playlistmaker.domain.models.Track
-import com.timchenko.playlistmaker.presentation.mapper.TrackMapper
 import com.timchenko.playlistmaker.presentation.search.SearchViewModel
 import com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerActivity
 import kotlinx.coroutines.delay
@@ -46,7 +45,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
@@ -67,7 +65,6 @@ class SearchFragment : Fragment() {
                 }
                 previousRequest = s?.toString() ?: ""
                 viewModel.searchDebounce(changedText = previousRequest)
-
                 binding.searchPrefs.visibility = if (binding.searchEditText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
             }
 
@@ -96,8 +93,6 @@ class SearchFragment : Fragment() {
 
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
             viewModel.getSearchHistory()
-            binding.searchPrefs.visibility =
-                if (hasFocus && binding.searchEditText.text.isEmpty()) View.VISIBLE else View.GONE
         }
 
         binding.refreshSearch.setOnClickListener {
@@ -111,6 +106,11 @@ class SearchFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getSearchHistory()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         simpleTextWatcher?.let { binding.searchEditText.removeTextChangedListener(it) }
@@ -122,7 +122,14 @@ class SearchFragment : Fragment() {
             is TracksState.Error -> showError()
             is TracksState.Empty -> showEmpty()
             is TracksState.Content -> showContent(state.tracks)
+            is TracksState.Default -> allGone()
         }
+    }
+
+    private fun allGone() {
+        binding.progressBar.visibility = View.GONE
+        binding.placeholderMessage.visibility = View.GONE
+        binding.recyclerTracks.visibility = View.GONE
     }
     private fun showLoading() {
         binding.progressBar.visibility = View.VISIBLE
@@ -138,7 +145,6 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.recyclerTracks.visibility = View.GONE
         binding.searchPrefs.visibility = View.GONE
-
         binding.refreshSearch.visibility = View.VISIBLE
     }
 
@@ -150,7 +156,6 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.recyclerTracks.visibility = View.GONE
         binding.searchPrefs.visibility = View.GONE
-
         binding.refreshSearch.visibility = View.GONE
     }
 
@@ -205,7 +210,7 @@ class SearchFragment : Fragment() {
             viewModel.onClick(track)
 
             val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-            displayIntent.putExtra("track", TrackMapper.map(track))
+            displayIntent.putExtra("track", track)
             startActivity(displayIntent)
         }
     }

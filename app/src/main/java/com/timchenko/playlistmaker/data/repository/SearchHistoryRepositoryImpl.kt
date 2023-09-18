@@ -57,8 +57,8 @@ class SearchHistoryRepositoryImpl(
     }
 
     private fun setFavoritesToTracks(tracks: ArrayList<Track>, indicators: List<Int>) {
-        for (i in tracks) {
-            i.isFavorite = i.trackId in indicators
+        for (track in tracks) {
+            track.isFavorite = track.trackId in indicators
         }
     }
 

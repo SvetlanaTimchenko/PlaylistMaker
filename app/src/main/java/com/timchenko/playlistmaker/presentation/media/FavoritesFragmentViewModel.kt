@@ -26,7 +26,7 @@ class FavoritesFragmentViewModel(
     }
 
     private fun processResults(tracks: List<Track>) {
-        if (tracks.isNullOrEmpty()) {
+        if (tracks.isEmpty()) {
             renderState(FavoriteState.Empty)
         }
         else {

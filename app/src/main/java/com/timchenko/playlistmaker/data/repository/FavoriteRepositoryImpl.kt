@@ -18,7 +18,7 @@ class FavoriteRepositoryImpl(
     }
 
     private fun convertFromFavoriteEntity(tracks: List<FavoriteEntity>): List<Track> {
-        return tracks.map { track -> favoriteMapper.map(track) }
+        return tracks.map { favoriteMapper.map(it) }
     }
 
     override suspend fun add(track: Track) {

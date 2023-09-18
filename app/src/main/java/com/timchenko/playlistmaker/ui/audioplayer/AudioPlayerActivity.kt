@@ -39,15 +39,14 @@ class AudioPlayerActivity : AppCompatActivity() {
             binding.timeBar.text = it.progress
         }
 
-        viewModel.observeFavoriteState().observe(this) {
-            if (it) {
+        viewModel.observeFavoriteState().observe(this) { isFavorite ->
+            if (isFavorite) {
                 binding.LikeBtn.setImageResource(R.drawable.buttonlike)
-                track.isFavorite = true
             }
             else {
                 binding.LikeBtn.setImageResource(R.drawable.buttonliken)
-                track.isFavorite = false
             }
+            track.isFavorite = !isFavorite
         }
 
         binding.artist.text = track.artistName

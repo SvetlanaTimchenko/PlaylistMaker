@@ -86,17 +86,13 @@ class AudioPlayerViewModel(
     }
 
     fun onFavoriteClicked(track: Track) {
-        if (track.isFavorite) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (track.isFavorite) {
                 favoriteInteractor.delete(track)
-                isFavourite.postValue(false)
-            }
-        }
-        else {
-            viewModelScope.launch {
+            } else {
                 favoriteInteractor.add(track)
-                isFavourite.postValue(true)
             }
+            isFavourite.postValue(!track.isFavorite)
         }
     }
 

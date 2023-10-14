@@ -38,7 +38,25 @@
     <string name="playlists">Playlists</string>
     <string name="new_playlist">New playlist</string>
     <string name="playlists_empty">You have not created any playlist</string>
+    <string name="create">Create</string>
+    <string name="title">Title*</string>
+    <string name="description">Description</string>
+    <string name="playlist_image_description">Image for playlist</string>
+    <string name="playlist_image_not_selected">Image is not selected</string>
+    <string name="rationale_permission">The permission is required to add the image to playlist</string>
+    <string name="playlist_dialog_title">Do you want to cancel playlist creation?</string>
+    <string name="playlist_dialog_message">All unsaved data will be lost</string>
+    <string name="playlist_dialog_cancel">Cancel</string>
+    <string name="playlist_dialog_confirm">Confirm</string>
+    <string name="playlist_created">Playlist "%s" created</string>
+    <string name="playlist_add">Add to playlist</string>
+    <string name="playlist_add_to_placeholder">XX tracks</string>
+    <string name="playlist_track_exists">Track exists in playlist "%s"</string>
+    <string name="playlist_track_added">Added to playlist "%s"</string>
 
-
+    <plurals name="track_counter">
+        <item quantity="one">%1$d track</item>
+        <item quantity="other">%1$d tracks</item>
+    </plurals>
 
 </resources>

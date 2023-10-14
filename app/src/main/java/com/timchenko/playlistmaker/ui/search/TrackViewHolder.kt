@@ -10,7 +10,7 @@ import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.domain.models.Track
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val trackName: TextView = itemView.findViewById(R.id.trackName)
+    private val trackName: TextView = itemView.findViewById(R.id.playlistAddName)
     private val description: TextView = itemView.findViewById(R.id.description)
     private val cover: ImageView = itemView.findViewById(R.id.trackCover)
 

@@ -1,6 +1,7 @@
 package com.timchenko.playlistmaker.di
 
 import com.timchenko.playlistmaker.presentation.audioplayer.AudioPlayerViewModel
+import com.timchenko.playlistmaker.presentation.media.AddPlaylistFragmentViewModel
 import com.timchenko.playlistmaker.presentation.media.FavoritesFragmentViewModel
 import com.timchenko.playlistmaker.presentation.media.PlaylistsFragmentViewModel
 import com.timchenko.playlistmaker.presentation.root.RootViewModel
@@ -15,7 +16,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        AudioPlayerViewModel(get(), get())
+        AudioPlayerViewModel(get(), get(), get())
     }
 
     viewModel {
@@ -31,6 +32,10 @@ val viewModelModule = module {
     }
 
     viewModel {
-        PlaylistsFragmentViewModel()
+        PlaylistsFragmentViewModel(get())
+    }
+
+    viewModel {
+        AddPlaylistFragmentViewModel(get())
     }
 }

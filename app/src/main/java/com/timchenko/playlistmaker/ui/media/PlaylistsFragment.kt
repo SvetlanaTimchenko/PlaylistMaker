@@ -73,6 +73,8 @@ class PlaylistsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = PlaylistsFragment()
+        fun newInstance() : PlaylistsFragment {
+            return PlaylistsFragment()
+        }
     }
 }

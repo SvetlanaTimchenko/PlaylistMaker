@@ -34,7 +34,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val viewModel: AudioPlayerViewModel by viewModel()
     private lateinit var track: Track
 
-    private lateinit var savedTimeTrack: String
+    private var savedTimeTrack: String? = null
 
     private val playlistAdapter = PlaylistAdapter {
         addTrackInPlaylist(it)
@@ -49,7 +49,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         track = getSerializable("track", Track::class.java)
 
         viewModel.observePlayerState().observe(this) {
-            savedTimeTrack = it.progress
+            this.savedTimeTrack = it.progress
             binding.playBtn.isEnabled = it.isPlayButtonEnabled
             binding.playBtn.setImageResource(it.buttonResource)
             binding.timeBar.text = it.progress
@@ -122,7 +122,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(resources.getDimensionPixelOffset(R.dimen.value_8)))
             .into(this.findViewById(R.id.trackCover))
 
-        // готовим медиаплеер
         viewModel.preparePlayer(track.previewUrl)
 
         binding.playBtn.setOnClickListener {
@@ -154,7 +153,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             binding.overlay.visibility = View.GONE
         }
 
-        // реализация клика на кнопку Назад
         binding.back.setOnClickListener {
             this.finish()
         }
@@ -202,7 +200,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         if (isPlaylistClickAllowed) {
             isPlaylistClickAllowed = false
             lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
                 isPlaylistClickAllowed = true
             }
         }
@@ -227,7 +225,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        savedTimeTrack = savedInstanceState.getCharSequence(PLAY_TIME).toString()
+        this.savedTimeTrack = savedInstanceState.getCharSequence(PLAY_TIME).toString()
 
     }
 
@@ -245,6 +243,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     companion object {
         const val PLAY_TIME = "PLAY_TIME"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 }

@@ -75,7 +75,7 @@ class FavoritesFragment : Fragment() {
         if (isClickAllowed) {
             isClickAllowed = false
             viewLifecycleOwner.lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
                 isClickAllowed = true
             }
         }
@@ -91,7 +91,9 @@ class FavoritesFragment : Fragment() {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        fun newInstance() = FavoritesFragment()
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
+        fun newInstance() : FavoritesFragment {
+            return FavoritesFragment()
+        }
     }
 }

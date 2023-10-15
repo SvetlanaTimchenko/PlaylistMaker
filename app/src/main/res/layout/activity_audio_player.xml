@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.audioplayer.AudioPlayerActivity">
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/playerFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/playerMainScreen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/back"
@@ -246,3 +260,59 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"
+        />
+<LinearLayout
+    android:id="@+id/bottomSheetPlaylist"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_bottom_sheet_light"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+<View
+    android:layout_width="50dp"
+    android:layout_height="4dp"
+    android:layout_gravity="center"
+    android:layout_marginTop="@dimen/value_8"
+    android:background="@drawable/shape_bottom_sheet_handler"
+    />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:layout_marginTop="@dimen/value_12"
+    android:layout_gravity="center"
+    android:gravity="fill"
+    android:textColor="?attr/colorOnPrimary"
+    android:fontFamily="@font/ys_display_medium"
+    android:textSize="19sp"
+    android:text="@string/playlist_add"
+    />
+
+    <Button
+        android:id="@+id/buttonNewPlaylist"
+        style="@style/smallButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/new_playlist"
+        android:layout_marginTop="@dimen/value_16"
+        android:layout_marginBottom="@dimen/value_24"
+        />
+
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recyclerPlaylistsInPLayer"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    />
+
+</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

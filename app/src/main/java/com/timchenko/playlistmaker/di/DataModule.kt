@@ -5,12 +5,14 @@ import android.media.MediaPlayer
 import androidx.room.Room
 import com.google.gson.Gson
 import com.timchenko.playlistmaker.data.ExternalNavigator
+import com.timchenko.playlistmaker.data.ImageStorage
 import com.timchenko.playlistmaker.data.NetworkClient
 import com.timchenko.playlistmaker.data.db.AppDatabase
 import com.timchenko.playlistmaker.data.impl.ExternalNavigatorImpl
 import com.timchenko.playlistmaker.data.network.ITunesApi
 import com.timchenko.playlistmaker.data.network.RetrofitNetworkClient
 import com.timchenko.playlistmaker.data.repository.SearchHistoryRepositoryImpl
+import com.timchenko.playlistmaker.data.storage.ImageStorageImpl
 import com.timchenko.playlistmaker.domain.repository.SearchHistoryRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -50,6 +52,12 @@ val dataModule = module {
     }
 
     single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "playlist.db").build()
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "playlist.db")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    single<ImageStorage> {
+        ImageStorageImpl(get())
     }
 }

@@ -47,5 +47,14 @@
         android:textSize="19sp"
         android:layout_marginTop="18dp"
         android:text="@string/playlists_empty"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/recyclerPlaylists"
+        android:paddingHorizontal="@dimen/value_16"
+        android:layout_marginTop="@dimen/value_16"
+        app:layout_constraintTop_toBottomOf="@+id/buttonNewPlaylist"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

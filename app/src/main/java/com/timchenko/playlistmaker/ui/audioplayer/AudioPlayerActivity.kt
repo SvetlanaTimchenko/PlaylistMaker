@@ -19,14 +19,11 @@ import com.timchenko.playlistmaker.presentation.audioplayer.AudioPlayerViewModel
 import com.timchenko.playlistmaker.presentation.models.PlaylistState
 import com.timchenko.playlistmaker.presentation.models.PlaylistTrackState
 import com.timchenko.playlistmaker.ui.media.AddPlaylistFragment
+import com.timchenko.playlistmaker.util.Formatter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.util.Date
-import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -96,6 +93,7 @@ class AudioPlayerActivity : AppCompatActivity() {
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                     renderToast(addedToPlaylist.playlistName, true)
                 }
+                else -> {}
             }
 
         }
@@ -104,7 +102,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.track.text = track.trackName
         binding.countryVar.text = track.country
         binding.genderVar.text = track.primaryGenreName
-        binding.timeVar.text = track.trackTime
+        binding.timeVar.text = Formatter.convertMillisToMinutesAndSeconds(track.trackTimeMillis)
         binding.yearVar.text = convertToYear(track.releaseDate)
         binding.albumGroup.visibility = View.GONE
 
@@ -230,7 +228,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun convertToYear(releaseDate: String?): String? {
-        return SimpleDateFormat("yyyy", Locale.getDefault()).format(Date.from(Instant.parse(releaseDate)))
+//        return SimpleDateFormat("yyyy", Locale.getDefault()).format(Date.from(Instant.parse(releaseDate)))
+        return Formatter.convertToYear(releaseDate)
     }
 
     private fun <T : Serializable?> getSerializable(name: String, clazz: Class<T>): T

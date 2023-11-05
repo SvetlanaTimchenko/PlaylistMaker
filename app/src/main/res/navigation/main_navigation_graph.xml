@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mediaFragment_to_addPlaylistFragment"
             app:destination="@id/addPlaylistFragment" />
+        <action
+            android:id="@+id/action_mediaFragment_to_playlistDetailsFragment"
+            app:destination="@id/playlistDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -38,4 +41,17 @@
         android:name="com.timchenko.playlistmaker.ui.media.AddPlaylistFragment"
         android:label="fragment_add_playlist"
         tools:layout="@layout/fragment_add_playlist" />
+    <fragment
+        android:id="@+id/playlistDetailsFragment"
+        android:name="com.timchenko.playlistmaker.ui.media.PlaylistDetailsFragment"
+        android:label="fragment_playlist_details"
+        tools:layout="@layout/fragment_playlist_details" >
+        <action
+            android:id="@+id/action_playlistDetailsFragment_to_editPlaylistFragment"
+            app:destination="@id/editPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="com.timchenko.playlistmaker.ui.media.EditPlaylistFragment"
+        android:label="EditPlaylistFragment" />
 </navigation>

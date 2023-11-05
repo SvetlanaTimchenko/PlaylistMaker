@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.domain.models.Playlist
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder> () {
+class PlaylistAdapter(private val listener: Listener) : RecyclerView.Adapter<PlaylistViewHolder> () {
 
     var playlists = mutableListOf<Playlist>()
 
@@ -20,9 +20,17 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder> () {
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         val playlist = playlists[position]
         holder.bind(playlist)
+
+        holder.itemView.setOnClickListener {
+            listener.onClick(playlist)
+        }
     }
 
     override fun getItemCount(): Int {
         return playlists.size
+    }
+
+    fun interface Listener {
+        fun onClick(playlist: Playlist)
     }
 }

@@ -269,20 +269,9 @@
         />
 <LinearLayout
     android:id="@+id/bottomSheetPlaylist"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/shape_bottom_sheet_light"
-    android:orientation="vertical"
-    app:behavior_hideable="true"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    style="@style/BottomSheetLinearLayout">
 
-<View
-    android:layout_width="50dp"
-    android:layout_height="4dp"
-    android:layout_gravity="center"
-    android:layout_marginTop="@dimen/value_8"
-    android:background="@drawable/shape_bottom_sheet_handler"
-    />
+    <View style="@style/BottomSheetHandle" />
 
 <TextView
     android:layout_width="wrap_content"

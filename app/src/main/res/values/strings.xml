@@ -38,6 +38,8 @@
     <string name="new_playlist">Новый плейлист</string>
     <string name="playlists_empty">Вы не создали ни одного плейлиста</string>
     <string name="create">Создать</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
     <string name="title">Название*</string>
     <string name="description">Описание</string>
     <string name="playlist_image_description">Картинка для плейлиста</string>
@@ -52,6 +54,17 @@
     <string name="playlist_add_to_placeholder">XX треков</string>
     <string name="playlist_track_exists">Трек уже добавлен в плейлист "%s"</string>
     <string name="playlist_track_added">Добавлено в плейлист "%s"</string>
+    <string name="playlist_empty">В плейлисте нет треков</string>
+    <string name="playlist_no_tracks_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="playlist_delete">Удалить плейлист</string>
+    <string name="playlist_delete_message">Хотите удалить плейлист?</string>
+    <string name="track_delete">Удалить трек</string>
+    <string name="track_delete_from_playlist_message">Хотите удалить трек?</string>
+    <string name="track_delete_confirm">Удалить</string>
+    <string name="share">Поделиться</string>
+    <string name="edit_information">Редактировать информацию</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 
     <plurals name="track_counter">
         <item quantity="zero">%1$d треков</item>
@@ -60,6 +73,15 @@
         <item quantity="few">%1$d трека</item>
         <item quantity="many">%1$d треков</item>
         <item quantity="other">%1$d треков</item>
+    </plurals>
+
+    <plurals name="minutes_counter">
+        <item quantity="zero">%1$d минут</item>
+        <item quantity="one">%1$d минута</item>
+        <item quantity="two">%1$d минуты</item>
+        <item quantity="few">%1$d минут</item>
+        <item quantity="many">%1$d минут</item>
+        <item quantity="other">%1$d минут</item>
     </plurals>
 
 </resources>

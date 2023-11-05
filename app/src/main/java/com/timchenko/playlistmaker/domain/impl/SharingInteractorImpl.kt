@@ -11,6 +11,10 @@ class SharingInteractorImpl(
         externalNavigator.shareLink(url = link, title = title)
     }
 
+    override fun sharePlaylist(message: String) {
+        externalNavigator.sharePlaylist(message)
+    }
+
     override fun openTerms(link: String) {
         externalNavigator.openLink(url = link)
     }

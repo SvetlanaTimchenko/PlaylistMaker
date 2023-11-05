@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import com.timchenko.playlistmaker.domain.PlaylistInteractor
 import com.timchenko.playlistmaker.domain.models.Playlist
 
-class AddPlaylistFragmentViewModel(
+open class AddPlaylistFragmentViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
-    private val playlist = Playlist(tracks = ArrayList())
+    open var playlist = Playlist(tracks = ArrayList())
     private val playlistState = MutableLiveData<Playlist>()
     fun observePlaylistState() : LiveData<Playlist> = playlistState
 

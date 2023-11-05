@@ -1,4 +1,4 @@
-package com.timchenko.playlistmaker.ui.search
+package com.timchenko.playlistmaker.ui.media
 
 import android.view.View
 import android.widget.ImageView
@@ -10,7 +10,7 @@ import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.util.Formatter
 
-class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class PlaylistTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackName: TextView = itemView.findViewById(R.id.playlistAddName)
     private val description: TextView = itemView.findViewById(R.id.description)
     private val cover: ImageView = itemView.findViewById(R.id.trackCover)

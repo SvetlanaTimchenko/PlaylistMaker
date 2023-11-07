@@ -41,10 +41,11 @@ class PlaylistRepositoryImpl(
     }
 
     private fun saveImage(imagePath: String?): String {
-        if (imagePath != null && imagePath != "") {
-            return storage.saveImageInPrivateStorage(imagePath)
+        return if(imagePath?.isEmpty() == false) {
+            storage.saveImageInPrivateStorage(imagePath)
+        } else {
+            ""
         }
-        return ""
     }
 
     override suspend fun delete(playlistId: Int) {

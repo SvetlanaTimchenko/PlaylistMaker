@@ -107,7 +107,7 @@ class PlaylistDetailsFragment: Fragment() {
             Formatter.convertMillisToMinutes(playlist.trackTimerMillis).toInt()
         )
 
-        binding.playlistStats.text = numberOfMinutesString  + " \u2022 " + numberOfTracksString
+       binding.playlistStats.text = "$numberOfMinutesString \u2022 $numberOfTracksString"
 
         Glide.with(this)
             .load(playlist.uri)

@@ -129,7 +129,7 @@ class AudioPlayerViewModel(
     private fun addTrackToPlaylist(playlist: Playlist, track: Track) {
         playlist.tracks.add(track.trackId)
         playlist.tracksCounter += 1
-        playlist.trackTimerMillis += track.trackTimeMillis!!
+        playlist.trackTimerMillis += track.trackTimeMillis ?: 0
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {

@@ -93,7 +93,7 @@ class AudioPlayerActivity : AppCompatActivity() {
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                     renderToast(addedToPlaylist.playlistName, true)
                 }
-                else -> {}
+                else -> Unit
             }
 
         }

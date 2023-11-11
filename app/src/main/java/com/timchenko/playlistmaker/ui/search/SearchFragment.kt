@@ -108,7 +108,9 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.getSearchHistory()
+        if (binding.searchEditText.text.isEmpty()) {
+            viewModel.getSearchHistory()
+        }
     }
 
     override fun onDestroyView() {

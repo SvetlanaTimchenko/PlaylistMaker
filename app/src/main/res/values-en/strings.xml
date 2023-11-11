@@ -66,6 +66,8 @@
     <string name="edit_information">Edit information</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="moveon">Listen the track</string>
+    <string name="dot">dot</string>
 
     <plurals name="track_counter">
         <item quantity="one">%1$d track</item>

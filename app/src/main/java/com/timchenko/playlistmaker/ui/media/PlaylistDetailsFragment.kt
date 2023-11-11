@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class PlaylistDetailsFragment: Fragment() {
+class PlaylistDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentPlaylistDetailsBinding
     private var numberOfTracksString: String = ""
@@ -58,8 +58,7 @@ class PlaylistDetailsFragment: Fragment() {
         if (playlistID > 0) {
             viewModel.getPlaylist(playlistID)
             viewModel.getTracksForPlaylist(playlistID)
-        }
-        else {
+        } else {
             findNavController().popBackStack()
         }
         viewModel.observePlaylist().observe(viewLifecycleOwner) {
@@ -76,6 +75,7 @@ class PlaylistDetailsFragment: Fragment() {
                     startActivity(displayIntent)
                 }
             }
+
             override fun onLongClick(trackId: Int): Boolean {
                 showDeleteTrackDialog(trackId)
                 return true
@@ -107,7 +107,7 @@ class PlaylistDetailsFragment: Fragment() {
             Formatter.convertMillisToMinutes(playlist.trackTimerMillis).toInt()
         )
 
-       binding.playlistStats.text = "$numberOfMinutesString \u2022 $numberOfTracksString"
+        binding.playlistStats.text = "$numberOfMinutesString \u2022 $numberOfTracksString"
 
         Glide.with(this)
             .load(playlist.uri)
@@ -121,10 +121,14 @@ class PlaylistDetailsFragment: Fragment() {
             .transform(CenterCrop())
             .into(binding.playlistDetailsCoverMenu)
 
-        binding.playlistDetailsCover.contentDescription = playlist.name + " : " + playlist.description
+        binding.playlistDetailsCover.contentDescription =
+            playlist.name + " : " + playlist.description
 
         bottomSheetTracks.apply {
-            peekHeight = binding.root.height - binding.buttonPlaylistShare.bottom - resources.getDimensionPixelSize(R.dimen.value_24)
+            peekHeight =
+                binding.root.height - binding.buttonPlaylistShare.bottom - resources.getDimensionPixelSize(
+                    R.dimen.value_24
+                )
             state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
@@ -154,9 +158,10 @@ class PlaylistDetailsFragment: Fragment() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> binding.overlayPl.visibility = View.GONE
-                    else ->binding.overlayPl.visibility = View.VISIBLE
+                    else -> binding.overlayPl.visibility = View.VISIBLE
                 }
             }
+
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
         })
@@ -176,15 +181,17 @@ class PlaylistDetailsFragment: Fragment() {
     }
 
     private fun initPlaylistTracks(state: PlaylistTrackState) {
-        when(state) {
+        when (state) {
             is PlaylistTrackState.Empty -> {
                 showEmpty()
                 playlistTracks = listOf()
             }
+
             is PlaylistTrackState.Content -> {
                 showContent(state.tracks)
                 playlistTracks = state.tracks
             }
+
             else -> {}
         }
     }
@@ -216,12 +223,12 @@ class PlaylistDetailsFragment: Fragment() {
     }
 
     private fun showDeleteTrackDialog(trackId: Int) {
-        MaterialAlertDialogBuilder(requireContext(),  R.style.AlertDialogTheme)
+        MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
             .setTitle(R.string.track_delete)
             .setMessage(R.string.track_delete_from_playlist_message)
-            .setNegativeButton(R.string.no){_,_ ->
+            .setNegativeButton(R.string.no) { _, _ ->
             }
-            .setPositiveButton(R.string.yes){_,_ ->
+            .setPositiveButton(R.string.yes) { _, _ ->
                 val playlistId = requireArguments().getInt(PLAYLIST_ID, 0)
                 if (playlistId > 0)
                     viewModel.deleteTrackFromPlaylist(playlistId, trackId)
@@ -229,12 +236,12 @@ class PlaylistDetailsFragment: Fragment() {
     }
 
     private fun showDeletePlaylistDialog() {
-        MaterialAlertDialogBuilder(requireContext(),  R.style.AlertDialogTheme)
+        MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
             .setTitle(R.string.playlist_delete)
             .setMessage(R.string.playlist_delete_message)
             .setNegativeButton(R.string.no) { _, _ ->
             }
-            .setPositiveButton(R.string.yes){_,_ ->
+            .setPositiveButton(R.string.yes) { _, _ ->
                 val playlistId = requireArguments().getInt(PLAYLIST_ID, 0)
                 if (playlistId > 0) {
                     viewModel.deletePlaylist(playlistId)
@@ -250,13 +257,17 @@ class PlaylistDetailsFragment: Fragment() {
                 getString(R.string.playlist_no_tracks_to_share),
                 Toast.LENGTH_LONG
             ).show()
-        }
-        else {
-            var sharePlaylistMessage = "${binding.playlistName.text}\n${binding.playlistDescription.text}\n${numberOfTracksString}\n\n"
+        } else {
+            var sharePlaylistMessage =
+                "${binding.playlistName.text}\n${binding.playlistDescription.text}\n${numberOfTracksString}\n\n"
 
             for (i in playlistTracks.indices) {
-                sharePlaylistMessage += "${i+1}. ${playlistTracks[i].artistName} - ${playlistTracks[i].trackName} (${
-                    playlistTracks[i].trackTimeMillis?.let { Formatter.convertMillisToMinutesAndSeconds(it) }
+                sharePlaylistMessage += "${i + 1}. ${playlistTracks[i].artistName} - ${playlistTracks[i].trackName} (${
+                    playlistTracks[i].trackTimeMillis?.let {
+                        Formatter.convertMillisToMinutesAndSeconds(
+                            it
+                        )
+                    }
                 })\n"
             }
 

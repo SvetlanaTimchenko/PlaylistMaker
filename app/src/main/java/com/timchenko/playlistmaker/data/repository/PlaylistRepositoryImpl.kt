@@ -74,6 +74,10 @@ class PlaylistRepositoryImpl(
 
         appDatabase.getPlaylistDao().update(playlistEntity)
         appDatabase.getPlaylistTracksDao().deleteTrack(playlistId, trackId)
+
+        if (checkUnusedTracks(trackId)) {
+            appDatabase.getPlaylistTracksDao().deleteTracks(trackId)
+        }
     }
 
     override suspend fun getPlaylistTracks(playlistId: Int): Flow<List<Track>> = flow{
@@ -92,6 +96,17 @@ class PlaylistRepositoryImpl(
             if (i.trackId in indicators) {
                 i.isFavorite = true
             }
+        }
+    }
+    private suspend fun checkUnusedTracks(trackId: Int): Boolean {
+        val playlists = appDatabase.getPlaylistDao().getAll()?.let { convertFromPlaylistEntity(it) }
+        return if (playlists?.isEmpty() == true) {
+            true
+        } else {
+            val playlistsWithTrack = playlists!!.filter { playlist ->
+                playlist.tracks.contains(trackId)
+            }
+            playlistsWithTrack.isEmpty()
         }
     }
 }

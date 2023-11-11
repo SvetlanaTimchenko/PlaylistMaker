@@ -65,6 +65,8 @@
     <string name="edit_information">Редактировать информацию</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="moveon">Прослушать трек</string>
+    <string name="dot">точка</string>
 
     <plurals name="track_counter">
         <item quantity="zero">%1$d треков</item>
@@ -79,7 +81,7 @@
         <item quantity="zero">%1$d минут</item>
         <item quantity="one">%1$d минута</item>
         <item quantity="two">%1$d минуты</item>
-        <item quantity="few">%1$d минут</item>
+        <item quantity="few">%1$d минуты</item>
         <item quantity="many">%1$d минут</item>
         <item quantity="other">%1$d минут</item>
     </plurals>

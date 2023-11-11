@@ -19,4 +19,5 @@ data class Track(
      * Возвращает обновленный URL обложки размером 512х512
      */
     fun getCoverArtwork() = artworkUrl100?.replaceAfterLast('/',"512x512bb.jpg")
+    fun getCoverArtworkForPlaylist() = artworkUrl100?.replaceAfterLast('/',"60x60bb.jpg")
 }

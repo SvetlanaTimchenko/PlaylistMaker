@@ -41,6 +41,7 @@ class PlaylistDetailsFragment: Fragment() {
     private lateinit var playlistTrackAdapterListener: PlaylistTrackAdapter.Listener
 
     private lateinit var bottomSheetMenu: BottomSheetBehavior<LinearLayout>
+    private lateinit var bottomSheetTracks: BottomSheetBehavior<LinearLayout>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,9 +85,8 @@ class PlaylistDetailsFragment: Fragment() {
         playlistTrackAdapter = PlaylistTrackAdapter(playlistTrackAdapterListener)
         binding.recyclerPlaylistTracks.adapter = playlistTrackAdapter
 
-        bottomSheetMenu = BottomSheetBehavior.from(binding.BottomSheetPlaylistMenu).apply {
-            state = BottomSheetBehavior.STATE_COLLAPSED
-        }
+        bottomSheetMenu = BottomSheetBehavior.from(binding.BottomSheetPlaylistMenu)
+        bottomSheetTracks = BottomSheetBehavior.from(binding.bottomSheetPlaylistTracks)
     }
 
     private fun initPlaylist(playlist: Playlist) {
@@ -123,7 +123,7 @@ class PlaylistDetailsFragment: Fragment() {
 
         binding.playlistDetailsCover.contentDescription = playlist.name + " : " + playlist.description
 
-        BottomSheetBehavior.from(binding.bottomSheetPlaylistTracks).apply {
+        bottomSheetTracks.apply {
             peekHeight = binding.root.height - binding.buttonPlaylistShare.bottom - resources.getDimensionPixelSize(R.dimen.value_24)
             state = BottomSheetBehavior.STATE_COLLAPSED
         }

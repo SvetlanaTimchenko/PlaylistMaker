@@ -228,7 +228,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun convertToYear(releaseDate: String?): String? {
-//        return SimpleDateFormat("yyyy", Locale.getDefault()).format(Date.from(Instant.parse(releaseDate)))
         return Formatter.convertToYear(releaseDate)
     }
 

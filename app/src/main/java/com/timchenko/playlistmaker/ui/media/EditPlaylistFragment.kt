@@ -31,7 +31,7 @@ class EditPlaylistFragment: AddPlaylistFragment() {
             if (it.uri != null) {
                 Glide.with(this)
                     .load(it.uri)
-                    .placeholder(R.drawable.placeholderph)
+                    .placeholder(R.drawable.placeholderimg)
                     .transform(CenterCrop())
                     .into(binding.playlistImage)
             }

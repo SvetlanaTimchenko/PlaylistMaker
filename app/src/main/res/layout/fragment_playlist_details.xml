@@ -36,6 +36,7 @@
             android:layout_marginTop="@dimen/value_16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black"
             />
 
 
@@ -92,6 +93,7 @@
     <LinearLayout
         android:id="@+id/bottomSheetPlaylistTracks"
         style="@style/BottomSheetLinearLayoutThemed"
+        android:saveEnabled="true"
         app:behavior_hideable="false">
 
         <View style="@style/BottomSheetHandle" />

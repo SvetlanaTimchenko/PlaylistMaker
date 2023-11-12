@@ -52,10 +52,9 @@ class AudioPlayerViewModel(
     }
 
     fun playbackControl() {
-        if(audioPlayerInteractor.getCurrentState() == State.PLAYING) {
+        if (audioPlayerInteractor.getCurrentState() == State.PLAYING) {
             pausePlayer()
-        }
-        else{
+        } else {
             startPlayer()
         }
     }
@@ -95,8 +94,8 @@ class AudioPlayerViewModel(
     }
 
     private fun getCurrentPlayerPosition(): String {
-//        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(audioPlayerInteractor.getCurrentPosition()) ?: "00:00"
-        return Formatter.convertMillisToMinutesAndSeconds(audioPlayerInteractor.getCurrentPosition()) ?: "00:00"
+        return Formatter.convertMillisToMinutesAndSeconds(audioPlayerInteractor.getCurrentPosition())
+            ?: "00:00"
     }
 
     fun onFavoriteClicked(track: Track) {
@@ -114,12 +113,10 @@ class AudioPlayerViewModel(
         if (playlist.tracks.isEmpty()) {
             addTrackToPlaylist(playlist, track)
             addedToPlaylistState.postValue(PlaylistTrackState.Added(playlist.name))
-        }
-        else {
+        } else {
             if (playlist.tracks.contains(track.trackId)) {
                 addedToPlaylistState.postValue(PlaylistTrackState.Match(playlist.name))
-            }
-            else {
+            } else {
                 addTrackToPlaylist(playlist, track)
                 addedToPlaylistState.postValue(PlaylistTrackState.Added(playlist.name))
             }
@@ -162,8 +159,7 @@ class AudioPlayerViewModel(
             playlistInteractor.getAll().collect {
                 if (it.isEmpty()) {
                     renderState(PlaylistState.Empty)
-                }
-                else {
+                } else {
                     renderState(PlaylistState.Content(it))
                 }
             }
@@ -174,7 +170,7 @@ class AudioPlayerViewModel(
         playlistState.postValue(state)
     }
 
-    companion object{
+    companion object {
         private const val DELAY_UPDATE_TIME_MS = 300L
     }
 }

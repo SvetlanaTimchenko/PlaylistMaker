@@ -1,6 +1,5 @@
 package com.timchenko.playlistmaker.ui.media
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,6 @@ import com.timchenko.playlistmaker.domain.models.Playlist
 import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.presentation.media.PlaylistDetailsFragmentViewModel
 import com.timchenko.playlistmaker.presentation.models.PlaylistTrackState
-import com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerActivity
 import com.timchenko.playlistmaker.util.Formatter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -70,9 +68,12 @@ class PlaylistDetailsFragment : Fragment() {
         playlistTrackAdapterListener = object : PlaylistTrackAdapter.Listener {
             override fun onShortClick(track: Track) {
                 if (clickDebounce()) {
-                    val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-                    displayIntent.putExtra("track", track)
-                    startActivity(displayIntent)
+                    val bundle = Bundle()
+                    bundle.putParcelable(TRACK_INFO, track)
+                    findNavController().navigate(
+                        R.id.actionGlobalPlayer,
+                        bundle
+                    )
                 }
             }
 
@@ -92,19 +93,23 @@ class PlaylistDetailsFragment : Fragment() {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         binding.overlayPl.visibility = View.GONE
                     }
+
                     else -> {
                         binding.overlayPl.visibility = View.VISIBLE
                     }
                 }
             }
+
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
         })
 
         bottomSheetTracks = BottomSheetBehavior.from(binding.bottomSheetPlaylistTracks)
-        bottomSheetTracks.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetTracks.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
             }
+
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
         })
@@ -289,11 +294,13 @@ class PlaylistDetailsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         bottomSheetMenu.state = BottomSheetBehavior.STATE_HIDDEN
+        isClickAllowed = true
     }
 
     companion object {
         private const val PLAYLIST_ID = "playlistID"
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
+        private const val TRACK_INFO = "track"
         fun createArgs(playlistId: Int?): Bundle =
             bundleOf(PLAYLIST_ID to playlistId)
     }

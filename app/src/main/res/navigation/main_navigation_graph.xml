@@ -22,20 +22,12 @@
         android:name="com.timchenko.playlistmaker.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
-        <action
-            android:id="@+id/action_searchFragment_to_audioPlayerActivity"
-            app:destination="@id/audioPlayerActivity" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.timchenko.playlistmaker.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
-    <activity
-        android:id="@+id/audioPlayerActivity"
-        android:name="com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerActivity"
-        android:label="activity_audio_player"
-        tools:layout="@layout/activity_audio_player" />
     <fragment
         android:id="@+id/addPlaylistFragment"
         android:name="com.timchenko.playlistmaker.ui.media.AddPlaylistFragment"
@@ -55,4 +47,17 @@
         android:name="com.timchenko.playlistmaker.ui.media.EditPlaylistFragment"
         android:label="fragment_edit_playlist"
         tools:layout="@layout/fragment_add_playlist"/>
+    <fragment
+        android:id="@+id/audioPlayerFragment"
+        android:name="com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerFragment"
+        android:label="AudioPlayerFragment"
+        tools:layout="@layout/fragment_audio_player">
+        <action
+            android:id="@+id/action_audioPlayerFragment_to_addPlaylistFragment"
+            app:destination="@id/addPlaylistFragment" />
+    </fragment>
+    <action
+        android:id="@+id/actionGlobalPlayer"
+        app:destination="@+id/audioPlayerFragment" />
+
 </navigation>

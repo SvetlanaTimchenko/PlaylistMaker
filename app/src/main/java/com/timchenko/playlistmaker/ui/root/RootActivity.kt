@@ -22,16 +22,18 @@ class RootActivity : AppCompatActivity() {
 
         viewModel.setAppTheme()
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when(destination.id) {
+            when (destination.id) {
                 R.id.addPlaylistFragment -> binding.bottomNavigationView.visibility = View.GONE
                 R.id.playlistDetailsFragment -> binding.bottomNavigationView.visibility = View.GONE
                 R.id.editPlaylistFragment -> binding.bottomNavigationView.visibility = View.GONE
+                R.id.audioPlayerFragment -> binding.bottomNavigationView.visibility = View.GONE
                 else -> binding.bottomNavigationView.visibility = View.VISIBLE
             }
         }

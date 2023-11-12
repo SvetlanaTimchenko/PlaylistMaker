@@ -90,6 +90,14 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/overlayPl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"
+        />
+
     <LinearLayout
         android:id="@+id/bottomSheetPlaylistTracks"
         style="@style/BottomSheetLinearLayoutThemed"
@@ -119,14 +127,6 @@
             tools:text="В плейлисте нет треков" />
 
     </LinearLayout>
-
-    <View
-        android:id="@+id/overlayPl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#99000000"
-        android:visibility="gone"
-        />
 
     <LinearLayout
         android:id="@+id/BottomSheetPlaylistMenu"

@@ -86,7 +86,28 @@ class PlaylistDetailsFragment : Fragment() {
         binding.recyclerPlaylistTracks.adapter = playlistTrackAdapter
 
         bottomSheetMenu = BottomSheetBehavior.from(binding.BottomSheetPlaylistMenu)
+        bottomSheetMenu.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlayPl.visibility = View.GONE
+                    }
+                    else -> {
+                        binding.overlayPl.visibility = View.VISIBLE
+                    }
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
+
         bottomSheetTracks = BottomSheetBehavior.from(binding.bottomSheetPlaylistTracks)
+        bottomSheetTracks.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
     }
 
     private fun initPlaylist(playlist: Playlist) {
@@ -124,14 +145,6 @@ class PlaylistDetailsFragment : Fragment() {
         binding.playlistDetailsCover.contentDescription =
             playlist.name + " : " + playlist.description
 
-        bottomSheetTracks.apply {
-            peekHeight =
-                binding.root.height - binding.buttonPlaylistShare.bottom - resources.getDimensionPixelSize(
-                    R.dimen.value_24
-                )
-            state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-
         binding.buttonPlaylistShare.setOnClickListener {
             bottomSheetMenu.state = BottomSheetBehavior.STATE_HIDDEN
             sharePlaylist()
@@ -154,18 +167,6 @@ class PlaylistDetailsFragment : Fragment() {
             )
         }
 
-        bottomSheetMenu.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_HIDDEN -> binding.overlayPl.visibility = View.GONE
-                    else -> binding.overlayPl.visibility = View.VISIBLE
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            }
-        })
-
         binding.back.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -178,6 +179,16 @@ class PlaylistDetailsFragment : Fragment() {
                 }
             }
         )
+
+        binding.buttonPlaylistShare.post {
+            bottomSheetTracks.apply {
+                peekHeight =
+                    binding.root.height - binding.buttonPlaylistShare.bottom - resources.getDimensionPixelSize(
+                        R.dimen.value_24
+                    )
+                state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
     }
 
     private fun initPlaylistTracks(state: PlaylistTrackState) {

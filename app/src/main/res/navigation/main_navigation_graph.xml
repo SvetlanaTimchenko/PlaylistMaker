@@ -53,5 +53,6 @@
     <fragment
         android:id="@+id/editPlaylistFragment"
         android:name="com.timchenko.playlistmaker.ui.media.EditPlaylistFragment"
-        android:label="EditPlaylistFragment" />
+        android:label="fragment_edit_playlist"
+        tools:layout="@layout/fragment_add_playlist"/>
 </navigation>

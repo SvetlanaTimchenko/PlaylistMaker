@@ -127,7 +127,11 @@ class PlaylistDetailsFragment : Fragment() {
             Formatter.convertMillisToMinutes(playlist.trackTimerMillis).toInt()
         )
 
-        binding.playlistStats.text = "$numberOfMinutesString \u2022 $numberOfTracksString"
+        val sb = StringBuilder()
+        sb.append(numberOfMinutesString)
+        sb.append(" \u2022 ")
+        sb.append(numberOfTracksString)
+        binding.playlistStats.text = sb.toString()
 
         Glide.with(this)
             .load(playlist.uri)
@@ -268,20 +272,31 @@ class PlaylistDetailsFragment : Fragment() {
                 Toast.LENGTH_LONG
             ).show()
         } else {
-            var sharePlaylistMessage =
-                "${binding.playlistName.text}\n${binding.playlistDescription.text}\n${numberOfTracksString}\n\n"
+            val sb = StringBuilder()
+            sb.append("${binding.playlistName.text}\n${binding.playlistDescription.text}\n${numberOfTracksString}\n\n")
 
-            for (i in playlistTracks.indices) {
-                sharePlaylistMessage += "${i + 1}. ${playlistTracks[i].artistName} - ${playlistTracks[i].trackName} (${
-                    playlistTracks[i].trackTimeMillis?.let {
+            val tracksString = buildString {
+                for (i in playlistTracks.indices) {
+                    append(i + 1)
+                    append(". ")
+                    append(playlistTracks[i].artistName)
+                    append(" - ")
+                    append(playlistTracks[i].trackName)
+                    append(" (")
+                    append(playlistTracks[i].trackTimeMillis?.let {
                         Formatter.convertMillisToMinutesAndSeconds(
                             it
                         )
-                    }
-                })\n"
+                    })
+                    append(")")
+                    append("\n")
+                }
             }
+            sb.append(tracksString)
 
-            viewModel.shareApp(sharePlaylistMessage)
+
+//            viewModel.shareApp(sharePlaylistMessage)
+            viewModel.shareApp(sb.toString())
         }
     }
 

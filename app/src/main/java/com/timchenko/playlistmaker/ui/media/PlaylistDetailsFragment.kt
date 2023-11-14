@@ -145,8 +145,8 @@ class PlaylistDetailsFragment : Fragment() {
             .transform(CenterCrop())
             .into(binding.playlistDetailsCoverMenu)
 
-        binding.playlistDetailsCover.contentDescription =
-            playlist.name + " : " + playlist.description
+        binding.playlistDetailsCover.contentDescription = "${playlist.name}  :  + ${playlist.description}"
+
 
         binding.buttonPlaylistShare.setOnClickListener {
             bottomSheetMenu.state = BottomSheetBehavior.STATE_HIDDEN

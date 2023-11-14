@@ -67,7 +67,6 @@ class PlaylistRepositoryImpl(
 
         if (playlist.tracks.contains(trackId)) {
             playlist.tracks.remove(trackId)
-            playlist.tracksCounter--
             playlist.trackTimerMillis = playlist.trackTimerMillis - playlistTrackEntity.trackTimeMillis!!
         }
         playlistEntity = playlistMapper.map(playlist)

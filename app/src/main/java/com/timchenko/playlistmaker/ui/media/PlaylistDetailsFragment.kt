@@ -120,13 +120,7 @@ class PlaylistDetailsFragment : Fragment() {
         binding.playlistNameMenu.text = playlist.name
         binding.playlistDescription.text = playlist.description
         binding.playlistDescriptionMenu.text = playlist.description
-        numberOfTracksString = playlist.tracksCounter.let {
-            resources.getQuantityString(
-                R.plurals.track_counter,
-                it,
-                playlist.tracksCounter
-            )
-        }
+        numberOfTracksString = resources.getQuantityString(R.plurals.track_counter, playlist.tracks.size, playlist.tracks.size)
         val numberOfMinutesString: String = resources.getQuantityString(
             R.plurals.minutes_counter,
             Formatter.convertMillisToMinutes(playlist.trackTimerMillis).toInt(),

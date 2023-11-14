@@ -8,16 +8,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.domain.models.Track
+import com.timchenko.playlistmaker.util.Formatter
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackName: TextView = itemView.findViewById(R.id.playlistAddName)
-    private val description: TextView = itemView.findViewById(R.id.description)
+    private val artistName: TextView = itemView.findViewById(R.id.artistNameInList)
+    private val trackTime: TextView = itemView.findViewById(R.id.timeInList)
     private val cover: ImageView = itemView.findViewById(R.id.trackCover)
 
     fun bind(item: Track) {
         trackName.text = item.trackName
         cover.contentDescription = item.artistName + " : " + item.trackName
-        description.text = item.artistName + " \u2022 " + item.trackTime
+        artistName.text = item.artistName
+        trackTime.text = Formatter.convertMillisToMinutesAndSeconds(item.trackTimeMillis)
 
         Glide
             .with(itemView)

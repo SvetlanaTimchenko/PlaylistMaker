@@ -1,17 +1,17 @@
 package com.timchenko.playlistmaker.ui.media
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.timchenko.playlistmaker.R
 import com.timchenko.playlistmaker.databinding.FragmentFavoritesBinding
 import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.presentation.media.FavoritesFragmentViewModel
 import com.timchenko.playlistmaker.presentation.models.FavoriteState
-import com.timchenko.playlistmaker.ui.audioplayer.AudioPlayerActivity
 import com.timchenko.playlistmaker.ui.search.TrackAdapter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -46,10 +46,11 @@ class FavoritesFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getTracks()
+        isClickAllowed = true
     }
 
     private fun render(state: FavoriteState) {
-        when(state) {
+        when (state) {
             is FavoriteState.Empty -> showEmpty()
             is FavoriteState.Content -> showContent(state.tracks)
         }
@@ -84,15 +85,20 @@ class FavoritesFragment : Fragment() {
 
     private fun switchToPlayer(track: Track) {
         if (clickDebounce()) {
-            val displayIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-            displayIntent.putExtra("track", track)
-            startActivity(displayIntent)
+            val bundle = Bundle()
+            bundle.putParcelable(TRACK_INFO, track)
+
+            findNavController().navigate(
+                R.id.actionGlobalPlayer,
+                bundle
+            )
         }
     }
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
-        fun newInstance() : FavoritesFragment {
+        private const val TRACK_INFO = "track"
+        fun newInstance(): FavoritesFragment {
             return FavoritesFragment()
         }
     }

@@ -6,5 +6,5 @@ data class Playlist(
     var description: String? = null, // описание
     var uri: String? = null, // путь к обложке
     val tracks: ArrayList<Int>, // список треков
-    var tracksCounter: Int = 0
+    var trackTimerMillis: Int = 0
 )

@@ -2,6 +2,8 @@ package com.timchenko.playlistmaker.di
 
 import com.timchenko.playlistmaker.data.mapper.FavoriteMapper
 import com.timchenko.playlistmaker.data.mapper.PlaylistMapper
+import com.timchenko.playlistmaker.data.mapper.PlaylistTracksMapper
+import com.timchenko.playlistmaker.data.mapper.TrackMapper
 import com.timchenko.playlistmaker.data.repository.FavoriteRepositoryImpl
 import com.timchenko.playlistmaker.data.repository.MediaPlayerRepositoryImpl
 import com.timchenko.playlistmaker.data.repository.PlaylistRepositoryImpl
@@ -40,8 +42,10 @@ val repositoryModule = module {
     }
 
     factory { PlaylistMapper() }
+    factory { PlaylistTracksMapper() }
+    factory { TrackMapper }
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(get(), get(), get())
+        PlaylistRepositoryImpl(get(), get(), get(), get(), get())
     }
 }

@@ -39,6 +39,8 @@
     <string name="new_playlist">New playlist</string>
     <string name="playlists_empty">You have not created any playlist</string>
     <string name="create">Create</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
     <string name="title">Title*</string>
     <string name="description">Description</string>
     <string name="playlist_image_description">Image for playlist</string>
@@ -53,10 +55,28 @@
     <string name="playlist_add_to_placeholder">XX tracks</string>
     <string name="playlist_track_exists">Track exists in playlist "%s"</string>
     <string name="playlist_track_added">Added to playlist "%s"</string>
+    <string name="playlist_empty">Playlist is empty</string>
+    <string name="playlist_no_tracks_to_share">This playlist does not have tracks to share</string>
+    <string name="playlist_delete">Delete playlist</string>
+    <string name="playlist_delete_message">Do you want to delete playlist?</string>
+    <string name="track_delete">Delete track</string>
+    <string name="track_delete_from_playlist_message">Are you sure to delete the track from the playlist?</string>
+    <string name="track_delete_confirm">Delete</string>
+    <string name="share">Share</string>
+    <string name="edit_information">Edit information</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="moveon">Listen the track</string>
+    <string name="dot">dot</string>
 
     <plurals name="track_counter">
         <item quantity="one">%1$d track</item>
         <item quantity="other">%1$d tracks</item>
+    </plurals>
+
+    <plurals name="minutes_counter">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
     </plurals>
 
 </resources>

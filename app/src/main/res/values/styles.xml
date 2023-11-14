@@ -14,7 +14,6 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
-        <!--item name="android:layout_marginStart">28dp</item-->
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">22sp</item>
     </style>
@@ -75,6 +74,38 @@
         <item name="android:paddingVertical">@dimen/value_24</item>
         <item name="iconTint">?attr/colorOnPrimary</item>
     </style>
+    <style name="recyclerSecondaryText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/menu_icons</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    <style name="playlistMenuButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">?attr/colorOnSecondary</item>
+        <item name="android:gravity">fill</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:paddingHorizontal">@dimen/value_16</item>
+        <item name="android:paddingVertical">@dimen/value_21</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_16</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+    <style name="textPlaylist">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/value_24</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
     <style name="audioPlayerDescriptionText">
         <item name="android:textColor">@color/menu_icons</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
@@ -124,11 +155,12 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">@dimen/text_16</item>
-        <!--item name="android:textColor">?attr/colorOnPrimary</item-->
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
         <item name="colorSurface">@color/white</item>
+        <item name="android:backgroundDimAmount">0.60</item>
         <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleText</item>
         <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialogBodyText</item>
     </style>
@@ -151,5 +183,29 @@
         <item name="android:singleLine">true</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
+    </style>
+    <style name="PlaylistIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:tint">@color/black</item>
+        <item name="android:layout_marginTop">@dimen/value_16</item>
+    </style>
+    <style name="BottomSheetLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/shape_bottom_sheet_light</item>
+        <item name="behavior_hideable">true</item>
+        <item name="layout_behavior">com.google.android.material.bottomsheet.BottomSheetBehavior</item>
+    </style>
+    <style name="BottomSheetLinearLayoutThemed" parent="BottomSheetLinearLayout">
+        <item name="android:paddingHorizontal">@dimen/value_13</item>
+    </style>
+    <style name="BottomSheetHandle">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">4dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/value_8</item>
+        <item name="android:background">@drawable/shape_bottom_sheet_handler</item>
     </style>
 </resources>

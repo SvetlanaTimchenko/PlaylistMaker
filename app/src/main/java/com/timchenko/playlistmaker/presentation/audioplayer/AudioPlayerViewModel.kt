@@ -8,18 +8,18 @@ import com.timchenko.playlistmaker.domain.AudioPlayerInteractor
 import com.timchenko.playlistmaker.domain.FavoriteInteractor
 import com.timchenko.playlistmaker.domain.PlaylistInteractor
 import com.timchenko.playlistmaker.domain.models.Playlist
+import com.timchenko.playlistmaker.domain.models.PlaylistTracks
 import com.timchenko.playlistmaker.domain.models.State
 import com.timchenko.playlistmaker.domain.models.Track
 import com.timchenko.playlistmaker.presentation.models.PlaylistState
 import com.timchenko.playlistmaker.presentation.models.PlaylistTrackState
 import com.timchenko.playlistmaker.ui.audioplayer.PlayerState
+import com.timchenko.playlistmaker.util.Formatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class AudioPlayerViewModel(
     private val audioPlayerInteractor: AudioPlayerInteractor,
@@ -52,10 +52,9 @@ class AudioPlayerViewModel(
     }
 
     fun playbackControl() {
-        if(audioPlayerInteractor.getCurrentState() == State.PLAYING) {
+        if (audioPlayerInteractor.getCurrentState() == State.PLAYING) {
             pausePlayer()
-        }
-        else{
+        } else {
             startPlayer()
         }
     }
@@ -95,7 +94,8 @@ class AudioPlayerViewModel(
     }
 
     private fun getCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(audioPlayerInteractor.getCurrentPosition()) ?: "00:00"
+        return Formatter.convertMillisToMinutesAndSeconds(audioPlayerInteractor.getCurrentPosition())
+            ?: "00:00"
     }
 
     fun onFavoriteClicked(track: Track) {
@@ -111,27 +111,44 @@ class AudioPlayerViewModel(
 
     fun addTrackInPlaylist(playlist: Playlist, track: Track) {
         if (playlist.tracks.isEmpty()) {
-            addTrackToPlaylist(playlist, track.trackId)
+            addTrackToPlaylist(playlist, track)
             addedToPlaylistState.postValue(PlaylistTrackState.Added(playlist.name))
-        }
-        else {
+        } else {
             if (playlist.tracks.contains(track.trackId)) {
                 addedToPlaylistState.postValue(PlaylistTrackState.Match(playlist.name))
-            }
-            else {
-                addTrackToPlaylist(playlist, track.trackId)
+            } else {
+                addTrackToPlaylist(playlist, track)
                 addedToPlaylistState.postValue(PlaylistTrackState.Added(playlist.name))
             }
         }
     }
 
-    private fun addTrackToPlaylist(playlist: Playlist, trackId: Int) {
-        playlist.tracks.add(trackId)
-        playlist.tracksCounter += 1
+    private fun addTrackToPlaylist(playlist: Playlist, track: Track) {
+        playlist.tracks.add(track.trackId)
+        playlist.trackTimerMillis += track.trackTimeMillis ?: 0
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 playlistInteractor.update(playlist)
+            }
+        }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val playlistTrack = PlaylistTracks(
+                    id = null,
+                    playlistId = playlist.id!!,
+                    trackId = track.trackId,
+                    trackName = track.trackName,
+                    artistName = track.artistName,
+                    trackTimeMillis = track.trackTimeMillis,
+                    artworkUrl100 = track.artworkUrl100,
+                    collectionName = track.collectionName,
+                    releaseDate = track.releaseDate,
+                    primaryGenreName = track.primaryGenreName,
+                    country = track.country,
+                    previewUrl = track.previewUrl
+                )
+                playlistInteractor.addPlaylistTracks(playlistTrack)
             }
         }
     }
@@ -141,8 +158,7 @@ class AudioPlayerViewModel(
             playlistInteractor.getAll().collect {
                 if (it.isEmpty()) {
                     renderState(PlaylistState.Empty)
-                }
-                else {
+                } else {
                     renderState(PlaylistState.Content(it))
                 }
             }
@@ -153,7 +169,7 @@ class AudioPlayerViewModel(
         playlistState.postValue(state)
     }
 
-    companion object{
+    companion object {
         private const val DELAY_UPDATE_TIME_MS = 300L
     }
 }

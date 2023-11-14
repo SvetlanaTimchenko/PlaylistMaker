@@ -17,7 +17,9 @@ class MediaPlayerRepositoryImpl(
     }
 
     override fun pausePlayer() {
-        mediaPlayer.pause()
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+        }
     }
 
     override fun releasePlayer() {
@@ -36,7 +38,10 @@ class MediaPlayerRepositoryImpl(
         }
 
         mediaPlayer.setOnCompletionListener {
-            mediaPlayer.seekTo(0)
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+            }
             onCompleteListener()
         }
     }

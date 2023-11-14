@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="divider_context_nav_bar">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:background">@color/white</item>
+    </style>
+    <style name="BottomSheetLinearLayoutThemed" parent="BottomSheetLinearLayout">
+        <item name="android:paddingHorizontal">@dimen/value_13</item>
+        <item name="android:background">@drawable/shape_bottom_sheet_night</item>
     </style>
 </resources>

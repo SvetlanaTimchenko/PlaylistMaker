@@ -11,5 +11,5 @@ data class PlaylistEntity(
     val description: String?,
     val uri: String?,
     val tracks: String?,
-    val tracksCounter: Int
+    val tracksTimerMillis: Int
 )
